@@ -38,9 +38,7 @@ func (h *PatientHandler) CreatePatient(c echo.Context) error {
 		log.Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "Failed to create patient")
 	}
-	return c.JSON(http.StatusOK, echo.Map{
-		"data": patient,
-	})
+	return c.JSON(http.StatusOK, patient)
 }
 
 // Get all patients
@@ -66,9 +64,7 @@ func (h *PatientHandler) GetPatient(c echo.Context) error {
 		log.Error("Patient Not Found", err.Error())
 		return c.JSON(http.StatusNotFound, "Patient Not Found")
 	}
-	return c.JSON(http.StatusOK, echo.Map{
-		"data": patient,
-	})
+	return c.JSON(http.StatusOK, patient)
 }
 
 // Get single patient by slug
@@ -84,9 +80,7 @@ func (h *PatientHandler) GetPatientbySlug(c echo.Context) error {
 		log.Error("Patient Not Found", err.Error())
 		return c.JSON(http.StatusNotFound, "Patient Not Found")
 	}
-	return c.JSON(http.StatusOK, echo.Map{
-		"data": patient,
-	})
+	return c.JSON(http.StatusOK, patient)
 }
 
 // update single patient by id
@@ -109,9 +103,7 @@ func (h *PatientHandler) UpdatePatient(c echo.Context) error {
 		log.Error("Failed to update patient", err.Error())
 		return c.JSON(http.StatusInternalServerError, "Failed to update patient")
 	}
-	return c.JSON(http.StatusOK, echo.Map{
-		"data": patient,
-	})
+	return c.JSON(http.StatusOK, patient)
 }
 
 // delete patient by id
