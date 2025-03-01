@@ -1,0 +1,5 @@
+# .env file
+.env
+
+# air toml file for dev environment
+.air.toml
