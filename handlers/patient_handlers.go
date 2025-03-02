@@ -97,6 +97,12 @@ func (h *PatientHandler) UpdatePatient(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Invalid Request data")
 	}
 
+	// Validate the request body
+	if err := helpers.ValidatePatient(&dtoPatient); err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
 	patient := new(models.Patient)
 	patient, err = h.PatientRepository.UpdatePatient(id, &dtoPatient)
 	if err != nil {

@@ -19,10 +19,10 @@ func SetupRoutes(app *echo.Echo) {
 	patientHandler := handlers.NewPatientHandler(patientRepo)
 	api.POST("/patients", patientHandler.CreatePatient)
 	api.GET("/patients", patientHandler.GetAllPatients)
-	api.GET("/patients/search", patientHandler.GetPatientbySlug)
 	api.GET("/patients/:id", patientHandler.GetPatient)
 	api.PUT("/patients/:id", patientHandler.UpdatePatient)
 	api.DELETE("/patients/:id", patientHandler.DeletePatient)
+	api.GET("/patients/search", patientHandler.GetPatientbySlug)
 
 	// appointment routes
 	// user endpoints
