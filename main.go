@@ -35,8 +35,9 @@ func main() {
 
 	// deal with cors for frontend
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:3000", "http://*"},
-		// AllowMethods:     []string{"*"},
+		AllowOrigins:     []string{"http://localhost:3000", "http://*", "https://*"},
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowMethods:     []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
 		AllowCredentials: true,
 	}))
 
