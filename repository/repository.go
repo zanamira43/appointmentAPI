@@ -24,3 +24,12 @@ type PatientRepository interface {
 	UpdatePatient(id uint, patient *dto.Patient) (*models.Patient, error)
 	DeletePatient(id uint) error
 }
+
+// offer repository interface
+type OfferRepository interface {
+	CreateOffers(offer *dto.Offer) error
+	GetAllOffers() ([]models.Offer, error)
+	GetOfferByID(id uint) (*models.Offer, error)
+	UpdateOfferByID(id uint, offer *dto.Offer) (*models.Offer, error)
+	DeleteOfferByID(id uint) error
+}

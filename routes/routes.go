@@ -38,4 +38,13 @@ func SetupRoutes(app *echo.Echo) {
 	api.GET("/user/updateinfo", authHandler.UpdateInfo)
 	api.GET("/user/updatepassword", authHandler.UpdatePassword)
 	api.POST("/user/logout", authHandler.Logout)
+
+	// offer routes end points
+	offerRepo := repository.NewGormOfferRepository(database.DB)
+	offerHandler := handlers.NewOfferHandler(offerRepo)
+	api.POST("/offers", offerHandler.CreateOffers)
+	api.GET("/offers", offerHandler.GetAllOffers)
+	api.GET("/offers/:id", offerHandler.GetOffer)
+	api.PUT("/offers/:id", offerHandler.UpdateOffer)
+	api.DELETE("/offers/:id", offerHandler.DeleteOffer)
 }

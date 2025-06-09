@@ -34,7 +34,7 @@ func ValidateRegisterUser(dto *dto.Register) error {
 	return nil
 }
 
-// validate project
+// validate patient
 func ValidatePatient(dto *dto.Patient) error {
 	if dto.Name == "" {
 		return errors.New("name is required")
@@ -58,6 +58,23 @@ func ValidatePatient(dto *dto.Patient) error {
 
 	if dto.PhoneNumber == "" {
 		return errors.New("address is required")
+	}
+
+	return nil
+}
+
+// validate offer
+func ValidateOffer(dto *dto.Offer) error {
+	if dto.Title == "" {
+		return errors.New("title is required")
+	}
+
+	if dto.ServiceTypeID == 0 {
+		return errors.New("service type is required")
+	}
+
+	if dto.Price == 0 {
+		return errors.New("price is required")
 	}
 
 	return nil
