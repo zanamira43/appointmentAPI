@@ -33,3 +33,12 @@ type OfferRepository interface {
 	UpdateOfferByID(id uint, offer *dto.Offer) (*models.Offer, error)
 	DeleteOfferByID(id uint) error
 }
+
+// service type repository interface
+type ServiceTypeRepository interface {
+	CreateServiceTypes(offer *dto.ServiceType) error
+	GetAllServiceTypes() ([]models.ServiceType, error)
+	GetServiceTypeByID(id uint) (*models.ServiceType, error)
+	UpdateServiceTypeByID(id uint, offer *dto.ServiceType) (*models.ServiceType, error)
+	DeleteServiceTypeByID(id uint) error
+}

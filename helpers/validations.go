@@ -79,3 +79,12 @@ func ValidateOffer(dto *dto.Offer) error {
 
 	return nil
 }
+
+// validate service type
+func ValidateServiceType(dto *dto.ServiceType) error {
+	if dto.Name == "" {
+		return errors.New("name is required")
+	}
+
+	return nil
+}

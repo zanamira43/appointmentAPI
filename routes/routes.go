@@ -47,4 +47,13 @@ func SetupRoutes(app *echo.Echo) {
 	api.GET("/offers/:id", offerHandler.GetOffer)
 	api.PUT("/offers/:id", offerHandler.UpdateOffer)
 	api.DELETE("/offers/:id", offerHandler.DeleteOffer)
+
+	// service type routes end points
+	serviceTypeRepo := repository.NewGormServiceTypeRepository(database.DB)
+	serviceTypeHandler := handlers.NewServiceTypeHandler(serviceTypeRepo)
+	api.POST("/service-types", serviceTypeHandler.CreateServiceTypes)
+	api.GET("/service-types", serviceTypeHandler.GetAllServiceTypes)
+	api.GET("/service-types/:id", serviceTypeHandler.GetServiceType)
+	api.PUT("/service-types/:id", serviceTypeHandler.UpdateServiceType)
+	api.DELETE("/service-types/:id", serviceTypeHandler.DeleteServiceType)
 }
