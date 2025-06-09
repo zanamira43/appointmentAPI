@@ -28,7 +28,7 @@ func SetupRoutes(app *echo.Echo) {
 	// user endpoints
 	userRepo := repository.NewGormUserRepository(database.DB)
 	authHandler := handlers.NewAuth(userRepo)
-	api.POST("/register", authHandler.Register)
+	api.POST("/signup", authHandler.SignUP)
 	api.POST("/login", authHandler.Login)
 
 	// middleware instance

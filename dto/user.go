@@ -5,10 +5,10 @@ import (
 )
 
 type User struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Email     string `json:"email" gorm:"unique"`
-	Password  []byte `json:"-"`
+	FirstName string `json:"first_name" validate:"required"`
+	LastName  string `json:"last_name" validate:"required"`
+	Email     string `json:"email" gorm:"unique" validate:"required,email"`
+	Password  []byte `json:"-" validate:"required"`
 }
 
 // hashing user password before store it in database

@@ -5,13 +5,17 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"github.com/zanamira43/appointment-api/dto"
+	"github.com/zanamira43/appointment-api/helpers"
 	"github.com/zanamira43/appointment-api/models"
 	"github.com/zanamira43/appointment-api/repository"
 	"github.com/zanamira43/appointment-api/utils"
 )
+
+var validate *validator.Validate
 
 type Auth struct {
 	Repo *repository.GormUserRepository
@@ -22,7 +26,7 @@ func NewAuth(repo *repository.GormUserRepository) *Auth {
 }
 
 // register new user
-func (h *Auth) Register(c echo.Context) error {
+func (h *Auth) SignUP(c echo.Context) error {
 
 	// var data map[string]string
 	// create user register instance
@@ -31,9 +35,19 @@ func (h *Auth) Register(c echo.Context) error {
 	// parse data from fornt end
 	if err := c.Bind(&data); err != nil {
 		log.Error(err.Error())
-		return c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
+	// validate data
+	// if err := validate.Struct(data); err != nil {
+	// 	log.Error(err.Error())
+	// 	return c.JSON(http.StatusBadRequest, err)
+	// }
+
+	if err := helpers.ValidateRegisterUser(&data); err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusBadRequest, err)
+	}
 	// matching password
 	if data.Password != data.PasswordConfirm {
 		log.Error("password does not match")
@@ -218,8 +232,10 @@ func (h *Auth) Logout(c echo.Context) error {
 	cookie := http.Cookie{
 		Name:     "jwt",
 		Value:    "",
-		Expires:  time.Now().Add(-time.Hour),
+		Path:     "/api",
+		Expires:  time.Unix(0, 0),
 		HttpOnly: true,
+		MaxAge:   -1,
 	}
 
 	c.SetCookie(&cookie)
