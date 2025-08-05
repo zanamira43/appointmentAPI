@@ -15,7 +15,7 @@ func NewGormPatientRepository(db *gorm.DB) *GormPatientRepository {
 }
 
 // insert new patient data into sql database
-func (r *GormPatientRepository) CreatePatient(patient *dto.Patient) error {
+func (r *GormPatientRepository) CreatePatient(patient *dto.PatientDto) error {
 	return r.DB.Create(&patient).Error
 }
 
@@ -50,7 +50,7 @@ func (r *GormPatientRepository) GetPatientBySlug(slug string) (*models.Patient, 
 }
 
 // update patient data by id from sql database
-func (r *GormPatientRepository) UpdatePatient(id uint, dtoPatient *dto.Patient) (*models.Patient, error) {
+func (r *GormPatientRepository) UpdatePatient(id uint, dtoPatient *dto.PatientDto) (*models.Patient, error) {
 	var patient models.Patient
 	err := r.DB.Where("id = ?", id).First(&patient).Error
 	if err != nil {
@@ -84,5 +84,5 @@ func (r *GormPatientRepository) UpdatePatient(id uint, dtoPatient *dto.Patient) 
 
 // delete patient data by id from sql database
 func (r *GormPatientRepository) DeletePatient(id uint) error {
-	return r.DB.Where("id = ?", id).Delete(&dto.Patient{}).Error
+	return r.DB.Where("id = ?", id).Delete(&dto.PatientDto{}).Error
 }

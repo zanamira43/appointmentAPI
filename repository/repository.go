@@ -17,28 +17,27 @@ type UserRepository interface {
 
 // project repository interface
 type PatientRepository interface {
-	CreatePatient(patient *dto.Patient) error
+	CreatePatient(patient *dto.PatientDto) error
 	GetAllPatients() ([]models.Patient, error)
 	GetPatientByID(id uint) (*models.Patient, error)
 	GetPatientBySlug(slug string) (*models.Patient, error)
-	UpdatePatient(id uint, patient *dto.Patient) (*models.Patient, error)
+	UpdatePatient(id uint, patient *dto.PatientDto) (*models.Patient, error)
 	DeletePatient(id uint) error
 }
 
-// offer repository interface
-type OfferRepository interface {
-	CreateOffers(offer *dto.Offer) error
-	GetAllOffers() ([]models.Offer, error)
-	GetOfferByID(id uint) (*models.Offer, error)
-	UpdateOfferByID(id uint, offer *dto.Offer) (*models.Offer, error)
-	DeleteOfferByID(id uint) error
+type SessionRepository interface {
+	CreateSession(session *dto.SessionDto) error
+	GetAllSessions() ([]models.Session, error)
+	GetSessionByID(id uint) (*models.Session, error)
+	UpdateSession(id uint, session *dto.SessionDto) (*models.Session, error)
+	DeleteSession(id uint) error
 }
 
-// service type repository interface
-type ServiceTypeRepository interface {
-	CreateServiceTypes(offer *dto.ServiceType) error
-	GetAllServiceTypes() ([]models.ServiceType, error)
-	GetServiceTypeByID(id uint) (*models.ServiceType, error)
-	UpdateServiceTypeByID(id uint, offer *dto.ServiceType) (*models.ServiceType, error)
-	DeleteServiceTypeByID(id uint) error
+// payment repository interface
+type PyamentRepository interface {
+	CreatePayments(payment *dto.PaymentDto) error
+	GetAllPayments() ([]models.Payment, error)
+	GetPaymentsByID(id uint) (*models.Payment, error)
+	UpdatePaymentsByID(id uint, payment *dto.PaymentDto) (*models.Payment, error)
+	DeletePaymentsByID(id uint) error
 }

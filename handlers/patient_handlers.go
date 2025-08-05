@@ -21,7 +21,9 @@ func NewPatientHandler(patientRepo *repository.GormPatientRepository) *PatientHa
 
 // Create New Patient
 func (h *PatientHandler) CreatePatient(c echo.Context) error {
-	patient := new(dto.Patient)
+	patient := new(dto.PatientDto)
+
+	// Bind the request body to the patient struct
 
 	if err := c.Bind(&patient); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
@@ -91,7 +93,7 @@ func (h *PatientHandler) UpdatePatient(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Invalid Patient Id")
 	}
 
-	var dtoPatient dto.Patient
+	var dtoPatient dto.PatientDto
 	if err := c.Bind(&dtoPatient); err != nil {
 		log.Error("Invalid Request data", err.Error())
 		return c.JSON(http.StatusBadRequest, "Invalid Request data")

@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Patient struct {
+type PatientDto struct {
 	Slug        string `json:"slug" gorm:"unique;index"`
 	Name        string `json:"name"`
 	Gender      string `json:"gender"`
@@ -19,7 +19,7 @@ type Patient struct {
 	PhoneNumber string `json:"phone_number"`
 }
 
-func (p *Patient) BeforeCreate(tx *gorm.DB) error {
+func (p *PatientDto) BeforeCreate(tx *gorm.DB) error {
 	// Generate a random number and convert it to a string
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	randomNum := r.Intn(89999999) + 10000000 // Adjust the range as needed

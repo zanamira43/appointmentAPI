@@ -11,102 +11,103 @@ import (
 	"github.com/zanamira43/appointment-api/repository"
 )
 
-type OfferHandler struct {
-	OfferRepository *repository.GormOfferRepository
+type SessionHandler struct {
+	SessionRepository *repository.GormSessionRepository
 }
 
-func NewOfferHandler(offerRepo *repository.GormOfferRepository) *OfferHandler {
-	return &OfferHandler{OfferRepository: offerRepo}
+func NewSessionHandler(Repo *repository.GormSessionRepository) *SessionHandler {
+	return &SessionHandler{SessionRepository: Repo}
 }
 
-// Create New Offer
-func (h *OfferHandler) CreateOffers(c echo.Context) error {
-	offer := new(dto.Offer)
+// Create New session
+func (h *SessionHandler) CreateSessions(c echo.Context) error {
+	sessiondto := new(dto.SessionDto)
 
-	if err := c.Bind(&offer); err != nil {
+	if err := c.Bind(&sessiondto); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
 	// Validate the request body
-	if err := helpers.ValidateOffer(offer); err != nil {
+	if err := helpers.ValidateSession(sessiondto); err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	err := h.OfferRepository.CreateOffers(offer)
+	err := h.SessionRepository.CreateSession(sessiondto)
 	if err != nil {
 		log.Error(err.Error())
-		return c.JSON(http.StatusInternalServerError, "Failed to create offer")
+		return c.JSON(http.StatusInternalServerError, "Failed to create session")
 	}
-	return c.JSON(http.StatusOK, offer)
+	return c.JSON(http.StatusOK, sessiondto)
 }
 
-// Get all offers
-func (h *OfferHandler) GetAllOffers(c echo.Context) error {
-	offers, err := h.OfferRepository.GetAllOffers()
+// Get all sessions
+func (h *SessionHandler) GetSessions(c echo.Context) error {
+	sessions, err := h.SessionRepository.GetAllSessions()
 	if err != nil {
 		log.Error(err.Error())
-		return c.JSON(http.StatusInternalServerError, "Failed to get offers")
+		return c.JSON(http.StatusInternalServerError, "Failed to get sessions")
 	}
-	return c.JSON(http.StatusOK, offers)
+	return c.JSON(http.StatusOK, sessions)
 }
 
-// Get single offer
-func (h *OfferHandler) GetOffer(c echo.Context) error {
+// Get single session
+func (h *SessionHandler) GetSession(c echo.Context) error {
 	id, err := helpers.GetParam(c)
 	if err != nil {
 		log.Error("Invalid Offer Id", err.Error())
 		return c.JSON(http.StatusBadRequest, "Invalid Offer Id")
 	}
 
-	offer, err := h.OfferRepository.GetOfferByID(id)
+	session, err := h.SessionRepository.GetSessionByID(id)
 	if err != nil {
 		log.Error("Offer Not Found", err.Error())
 		return c.JSON(http.StatusNotFound, "Offer Not Found")
 	}
-	return c.JSON(http.StatusOK, offer)
+	return c.JSON(http.StatusOK, session)
 }
 
-// update single offer by id
-func (h *OfferHandler) UpdateOffer(c echo.Context) error {
+// update single session by id
+func (h *SessionHandler) UpdateSession(c echo.Context) error {
 	id, err := helpers.GetParam(c)
 	if err != nil {
 		log.Error("Invalid Offer Id", err.Error())
 		return c.JSON(http.StatusBadRequest, "Invalid Offer Id")
 	}
 
-	var dtoOffer dto.Offer
-	if err := c.Bind(&dtoOffer); err != nil {
+	var sessionDto dto.SessionDto
+	if err := c.Bind(&sessionDto); err != nil {
 		log.Error("Invalid Request data", err.Error())
 		return c.JSON(http.StatusBadRequest, "Invalid Request data")
 	}
 
 	// Validate the request body
-	if err := helpers.ValidateOffer(&dtoOffer); err != nil {
+	if err := helpers.ValidateSession(&sessionDto); err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	offer := new(models.Offer)
-	offer, err = h.OfferRepository.UpdateOfferByID(id, &dtoOffer)
+	session := new(models.Session)
+	session, err = h.SessionRepository.UpdateSession(id, &sessionDto)
 	if err != nil {
-		log.Error("Failed to update offer", err.Error())
-		return c.JSON(http.StatusInternalServerError, "Failed to update offer")
+		log.Error("Failed to update session", err.Error())
+		return c.JSON(http.StatusInternalServerError, "Failed to update session")
 	}
-	return c.JSON(http.StatusOK, offer)
+	return c.JSON(http.StatusOK, session)
 }
 
 // delete offer by id
-func (h *OfferHandler) DeleteOffer(c echo.Context) error {
+func (h *SessionHandler) DeleteSession(c echo.Context) error {
 	id, err := helpers.GetParam(c)
 	if err != nil {
-		log.Error("Invalid Offer Id", err.Error())
-		return c.JSON(http.StatusBadRequest, "Invalid Offer Id")
+		log.Error("Invalid Session Id", err.Error())
+		return c.JSON(http.StatusBadRequest, "Invalid Session Id")
 	}
-	err = h.OfferRepository.DeleteOfferByID(id)
+
+	err = h.SessionRepository.DeleteSession(id)
 	if err != nil {
-		log.Error("Offer not found", err.Error())
-		return c.JSON(http.StatusInternalServerError, "Offer not found")
+		log.Error("Session not found", err.Error())
+		return c.JSON(http.StatusInternalServerError, "Session not found")
 	}
 	return c.NoContent(http.StatusNoContent)
 }

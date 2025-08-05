@@ -3,6 +3,7 @@ package helpers
 import (
 	"errors"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/zanamira43/appointment-api/dto"
@@ -35,7 +36,7 @@ func ValidateRegisterUser(dto *dto.Register) error {
 }
 
 // validate patient
-func ValidatePatient(dto *dto.Patient) error {
+func ValidatePatient(dto *dto.PatientDto) error {
 	if dto.Name == "" {
 		return errors.New("name is required")
 	}
@@ -64,26 +65,38 @@ func ValidatePatient(dto *dto.Patient) error {
 }
 
 // validate offer
-func ValidateOffer(dto *dto.Offer) error {
-	if dto.Title == "" {
-		return errors.New("title is required")
+func ValidateSession(dto *dto.SessionDto) error {
+	if dto.PatientID == 0 {
+		return errors.New("patient is required")
 	}
 
-	if dto.ServiceTypeID == 0 {
-		return errors.New("service type is required")
+	if dto.SessionDate == (time.Time{}) {
+		return errors.New("session date is required")
 	}
 
-	if dto.Price == 0 {
-		return errors.New("price is required")
+	if dto.Status == "" {
+		return errors.New("status is required")
 	}
 
 	return nil
 }
 
 // validate service type
-func ValidateServiceType(dto *dto.ServiceType) error {
-	if dto.Name == "" {
-		return errors.New("name is required")
+func ValidatePayment(dto *dto.PaymentDto) error {
+	if dto.PatientID == 0 {
+		return errors.New("patient is required")
+	}
+	if dto.SessionID == 0 {
+		return errors.New("session is required")
+	}
+	if dto.Amount == 0 {
+		return errors.New("amount is required")
+	}
+	if dto.PaymentDate == (time.Time{}) {
+		return errors.New("payment date is required")
+	}
+	if dto.Status == "" {
+		return errors.New("status is required")
 	}
 
 	return nil
