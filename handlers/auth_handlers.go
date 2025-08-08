@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 	"github.com/zanamira43/appointment-api/dto"
@@ -14,8 +13,6 @@ import (
 	"github.com/zanamira43/appointment-api/repository"
 	"github.com/zanamira43/appointment-api/utils"
 )
-
-var validate *validator.Validate
 
 type Auth struct {
 	Repo *repository.GormUserRepository

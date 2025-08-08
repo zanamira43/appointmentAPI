@@ -22,19 +22,27 @@ func (r *GormPaymentRepository) CreatepPayments(payment *dto.PaymentDto) error {
 }
 
 // get all payment data from sql database
-func (r *GormPaymentRepository) GetPayments() ([]models.Payment, error) {
+func (r *GormPaymentRepository) GetPayments(page, limit int) ([]models.Payment, int64, error) {
 	var payments []models.Payment
-	err := r.DB.Find(&payments).Error
+
+	var total int64
+	err := r.DB.Model(&payments).Count(&total).Error
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return payments, nil
+
+	offset := (page - 1) * limit
+	err = r.DB.Offset(offset).Limit(limit).Find(&payments).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	return payments, total, nil
 }
 
 // get payment data by id from sql database
 func (r *GormPaymentRepository) GetPayment(id uint) (*models.Payment, error) {
 	var payment models.Payment
-	err := r.DB.Where("id = ?", id).First(&payment).Error
+	err := r.DB.Where("id = ?", id).First(&payment).Preload("Patient").Preload("Session").Error
 	if err != nil {
 		return nil, err
 	}

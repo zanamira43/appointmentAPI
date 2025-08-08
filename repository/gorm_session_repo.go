@@ -21,20 +21,31 @@ func (r *GormSessionRepository) CreateSession(session *dto.SessionDto) error {
 	return r.DB.Create(&session).Error
 }
 
-// get all offers data from sql database
-func (r *GormSessionRepository) GetAllSessions() ([]models.Session, error) {
+// get all sessions data from sql database
+func (r *GormSessionRepository) GetAllSessions(page, limit int) ([]models.Session, int64, error) {
 	var sessions []models.Session
-	err := r.DB.Find(&sessions).Error
+
+	var total int64
+
+	// get total number of sessions
+	err := r.DB.Model(&sessions).Count(&total).Error
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return sessions, nil
+
+	offset := (page - 1) * limit
+
+	err = r.DB.Offset(offset).Limit(limit).Find(&sessions).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	return sessions, total, nil
 }
 
 // get offer data by id from sql database
 func (r *GormSessionRepository) GetSessionByID(id uint) (*models.Session, error) {
 	var session models.Session
-	err := r.DB.Where("id = ?", id).First(&session).Error
+	err := r.DB.Where("id = ?", id).First(&session).Preload("Patient").Error
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"math"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
@@ -9,6 +11,7 @@ import (
 	"github.com/zanamira43/appointment-api/helpers"
 	"github.com/zanamira43/appointment-api/models"
 	"github.com/zanamira43/appointment-api/repository"
+	"github.com/zanamira43/appointment-api/response"
 )
 
 type PatientHandler struct {
@@ -45,12 +48,45 @@ func (h *PatientHandler) CreatePatient(c echo.Context) error {
 
 // Get all patients
 func (h *PatientHandler) GetAllPatients(c echo.Context) error {
-	patients, err := h.PatientRepository.GetAllPatients()
+	// parse Search parameters
+	search := c.QueryParam("search")
+
+	// Parse pagination parameters
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	limit, err := strconv.Atoi(c.QueryParam("limit"))
+	if err != nil || limit < 1 {
+		limit = 10 // default limit
+	}
+
+	// Optional: Set maximum limit to prevent abuse
+	if limit > 100 {
+		limit = 100
+	}
+	patients, total, err := h.PatientRepository.GetAllPatients(page, limit, search)
 	if err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "Failed to get patients")
 	}
-	return c.JSON(http.StatusOK, patients)
+
+	// Calculate pagination metadata
+	totalPages := int(math.Ceil(float64(total) / float64(limit)))
+	hasNext := page < totalPages
+	hasPrev := page > 1
+	// Return the response
+	responses := response.PaginatedResponse{
+		Data:       patients,
+		Page:       page,
+		Limit:      limit,
+		Total:      total,
+		TotalPages: int(total / int64(limit)),
+		HasNext:    hasNext,
+		HasPrev:    hasPrev,
+	}
+	return c.JSON(http.StatusOK, responses)
 }
 
 // Get single patient by id

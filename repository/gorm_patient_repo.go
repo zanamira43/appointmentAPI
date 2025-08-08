@@ -20,19 +20,32 @@ func (r *GormPatientRepository) CreatePatient(patient *dto.PatientDto) error {
 }
 
 // get all patient data from sql database
-func (r *GormPatientRepository) GetAllPatients() ([]models.Patient, error) {
+func (r *GormPatientRepository) GetAllPatients(page, limit int, search string) ([]models.Patient, int64, error) {
 	var patients []models.Patient
-	err := r.DB.Find(&patients).Error
+
+	var total int64
+
+	offset := (page - 1) * limit
+
+	// get total number of patients
+	err := r.DB.Model(&patients).Count(&total).Error
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return patients, nil
+
+	err = r.DB.Offset(offset).Limit(limit).Where("name LIKE ?", "%"+search+"%").Or("slug LIKE ?", "%"+search+"%").Or("phone_number LIKE ?", "%"+search+"%").Find(&patients).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return patients, total, nil
+
 }
 
 // get patient data by id from sql database
 func (r *GormPatientRepository) GetPatientByID(id uint) (*models.Patient, error) {
 	var patient models.Patient
-	err := r.DB.Where("id = ?", id).First(&patient).Error
+	err := r.DB.Where("id = ?", id).First(&patient).Preload(" Sessions").Preload(" Payments").Error
 	if err != nil {
 		return nil, err
 	}

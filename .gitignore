@@ -4,4 +4,4 @@
 # air toml file for dev environment
 .air.toml
 
-tmp
+./tmp
