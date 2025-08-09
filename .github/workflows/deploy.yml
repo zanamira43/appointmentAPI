@@ -28,7 +28,7 @@ jobs:
     
     - name: Install dependencies
       run: go mod download
-           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
+           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /opt/appointment-api/main .
     
     - name: Run tests
       run: go test -v ./...
