@@ -40,9 +40,9 @@ func (r *GormUserRepository) GetUserByID(id uint) (*models.User, error) {
 }
 
 // get single user
-func (r *GormUserRepository) GetUserByEmail(email string) (*models.User, error) {
+func (r *GormUserRepository) GetUserByPhone(phone string) (*models.User, error) {
 	var user models.User
-	err := r.DB.Where("email = ?", email).First(&user).Error
+	err := r.DB.Where("phone = ?", phone).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
@@ -65,6 +65,10 @@ func (r *GormUserRepository) UpdateUser(id uint, updateuser *dto.User) (*models.
 
 	if updateuser.Email != "" {
 		user.Email = updateuser.Email
+	}
+
+	if updateuser.Phone != "" {
+		user.Phone = updateuser.Phone
 	}
 
 	if updateuser.Password != nil {

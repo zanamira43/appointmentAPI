@@ -81,7 +81,7 @@ func (h *Auth) Login(c echo.Context) error {
 
 	// checking user email
 	user := new(models.User)
-	user, err := h.Repo.GetUserByEmail(data.Phone)
+	user, err := h.Repo.GetUserByPhone(data.Phone)
 	if err != nil {
 		log.Error("Incorrect phone number")
 		return c.JSON(http.StatusNotFound, echo.Map{
