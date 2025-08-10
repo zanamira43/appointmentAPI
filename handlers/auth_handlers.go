@@ -35,12 +35,6 @@ func (h *Auth) SignUP(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	// validate data
-	// if err := validate.Struct(data); err != nil {
-	// 	log.Error(err.Error())
-	// 	return c.JSON(http.StatusBadRequest, err)
-	// }
-
 	if err := helpers.ValidateRegisterUser(&data); err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusBadRequest, err)
@@ -87,11 +81,11 @@ func (h *Auth) Login(c echo.Context) error {
 
 	// checking user email
 	user := new(models.User)
-	user, err := h.Repo.GetUserByEmail(data.Email)
+	user, err := h.Repo.GetUserByEmail(data.Phone)
 	if err != nil {
-		log.Error("Incorrect email")
+		log.Error("Incorrect phone number")
 		return c.JSON(http.StatusNotFound, echo.Map{
-			"message": "Incorrect email",
+			"message": "Incorrect phone number",
 		})
 	}
 

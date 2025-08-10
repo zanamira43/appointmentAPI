@@ -25,8 +25,8 @@ func ValidateRegisterUser(dto *dto.Register) error {
 		return errors.New("last name  is required")
 	}
 
-	if dto.Email == "" {
-		return errors.New("email is required")
+	if dto.Phone == "" {
+		return errors.New("phone is required")
 	}
 
 	if dto.Password == "" {
