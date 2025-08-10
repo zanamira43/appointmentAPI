@@ -35,7 +35,7 @@ jobs:
       env:
         DB_HOST: localhost
         DB_PORT: 3306
-        DB_USER: r
+        DB_USER: root
         DB_PASSWORD: Web2683@
         DB_NAME: clinicAppointment
 
