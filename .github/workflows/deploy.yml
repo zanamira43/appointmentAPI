@@ -28,8 +28,7 @@ jobs:
 
     - name: Build Go binary
       run: |
-          go mod tidy              # (optional but good practice)
-          go build -o main ./main.go
+          go mod download
     
     - name: Run tests
       run: go test -v ./...
