@@ -28,7 +28,7 @@ jobs:
 
     - name: Build Go binary
       run: |
-          go mod download
+          go mod tidy
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -o main .
     
     - name: Run tests
