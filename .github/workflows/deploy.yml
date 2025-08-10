@@ -55,4 +55,4 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           cd /opt/appointment-api
-          ./deploy.sh
+          echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S ./deploy.sh
