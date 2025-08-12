@@ -113,7 +113,8 @@ func (h *Auth) Login(c echo.Context) error {
 		HttpOnly: true,
 		Secure:   true, // Set to true if using HTTPS
 		Expires:  time.Now().Add(time.Hour * 24),
-		SameSite: http.SameSiteLaxMode,
+		SameSite: http.SameSiteNoneMode,
+		// SameSite: http.SameSiteLaxMode,
 	}
 	c.SetCookie(&cookie)
 
@@ -229,6 +230,9 @@ func (h *Auth) Logout(c echo.Context) error {
 		Path:     "/api",
 		Expires:  time.Unix(0, 0),
 		HttpOnly: true,
+		Secure:   true, // Set to true if using HTTPS
+		// SameSite: http.SameSiteLaxMode, // Use Lax mode
+		SameSite: http.SameSiteNoneMode, // Use None mode for cross-site
 		MaxAge:   -1,
 	}
 
