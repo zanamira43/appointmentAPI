@@ -109,6 +109,7 @@ func (h *Auth) Login(c echo.Context) error {
 	cookie := http.Cookie{
 		Name:     "jwt",
 		Value:    token,
+		Path:     "/api",
 		HttpOnly: true,
 		Secure:   true, // Set to true if using HTTPS
 		Expires:  time.Now().Add(time.Hour * 24),
