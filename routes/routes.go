@@ -14,16 +14,6 @@ func SetupRoutes(app *echo.Echo) {
 
 	api := app.Group("/api")
 
-	// patient routes
-	patientRepo := repository.NewGormPatientRepository(database.DB)
-	patientHandler := handlers.NewPatientHandler(patientRepo)
-	api.POST("/patients", patientHandler.CreatePatient)
-	api.GET("/patients", patientHandler.GetAllPatients)
-	api.GET("/patients/:id", patientHandler.GetPatient)
-	api.PUT("/patients/:id", patientHandler.UpdatePatient)
-	api.DELETE("/patients/:id", patientHandler.DeletePatient)
-	api.GET("/patients/search", patientHandler.GetPatientbySlug)
-
 	// appointment routes
 	// user endpoints
 	userRepo := repository.NewGormUserRepository(database.DB)
@@ -39,7 +29,17 @@ func SetupRoutes(app *echo.Echo) {
 	api.GET("/user/updatepassword", authHandler.UpdatePassword)
 	api.POST("/user/logout", authHandler.Logout)
 
-	// offer routes end points
+	// patient routes
+	patientRepo := repository.NewGormPatientRepository(database.DB)
+	patientHandler := handlers.NewPatientHandler(patientRepo)
+	api.POST("/patients", patientHandler.CreatePatient)
+	api.GET("/patients", patientHandler.GetAllPatients)
+	api.GET("/patients/:id", patientHandler.GetPatient)
+	api.PUT("/patients/:id", patientHandler.UpdatePatient)
+	api.DELETE("/patients/:id", patientHandler.DeletePatient)
+	api.GET("/patients/search", patientHandler.GetPatientbySlug)
+
+	// session routes end points
 	sessionRepo := repository.NewGormSessionRepository(database.DB)
 	sessionHandler := handlers.NewSessionHandler(sessionRepo)
 	api.POST("/sessions", sessionHandler.CreateSessions)
