@@ -40,6 +40,9 @@ func ValidatePatient(dto *dto.PatientDto) error {
 	if dto.Name == "" {
 		return errors.New("name is required")
 	}
+	if dto.PhoneNumber == "" {
+		return errors.New("phone number is required")
+	}
 
 	if dto.Gender == "" {
 		return errors.New("gender is required")
@@ -54,10 +57,6 @@ func ValidatePatient(dto *dto.PatientDto) error {
 	}
 
 	if dto.Address == "" {
-		return errors.New("address is required")
-	}
-
-	if dto.PhoneNumber == "" {
 		return errors.New("address is required")
 	}
 
