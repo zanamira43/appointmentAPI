@@ -17,11 +17,11 @@ type UserRepository interface {
 
 // project repository interface
 type PatientRepository interface {
-	CreatePatient(patient *dto.PatientDto) error
+	CreatePatient(patient *dto.Patient) error
 	GetAllPatients() ([]models.Patient, error)
 	GetPatientByID(id uint) (*models.Patient, error)
 	GetPatientBySlug(slug string) (*models.Patient, error)
-	UpdatePatient(id uint, patient *dto.PatientDto) (*models.Patient, error)
+	UpdatePatient(id uint, patient *dto.Patient) (*models.Patient, error)
 	DeletePatient(id uint) error
 }
 

@@ -36,7 +36,7 @@ func ValidateRegisterUser(dto *dto.Register) error {
 }
 
 // validate patient
-func ValidatePatient(dto *dto.PatientDto) error {
+func ValidatePatient(dto *dto.Patient) error {
 	if dto.Name == "" {
 		return errors.New("name is required")
 	}
