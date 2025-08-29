@@ -102,6 +102,7 @@ func (h *PatientHandler) GetPatient(c echo.Context) error {
 		log.Error("Patient Not Found", err.Error())
 		return c.JSON(http.StatusNotFound, "Patient Not Found")
 	}
+
 	return c.JSON(http.StatusOK, patient)
 }
 

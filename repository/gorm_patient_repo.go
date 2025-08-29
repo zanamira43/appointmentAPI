@@ -45,7 +45,7 @@ func (r *GormPatientRepository) GetAllPatients(page, limit int, search string) (
 // get patient data by id from sql database
 func (r *GormPatientRepository) GetPatientByID(id uint) (*models.Patient, error) {
 	var patient models.Patient
-	err := r.DB.Where("id = ?", id).First(&patient).Preload(" Sessions").Preload(" Payments").Error
+	err := r.DB.Preload("Sessions").Preload("Payments").Where("id = ?", id).First(&patient).Error
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (r *GormPatientRepository) GetPatientByID(id uint) (*models.Patient, error)
 // get patient data by slug from sql database
 func (r *GormPatientRepository) GetPatientBySlug(slug string) (*models.Patient, error) {
 	var patient models.Patient
-	err := r.DB.Where("slug = ?", slug).First(&patient).Error
+	err := r.DB.Preload("Sessions").Preload("Payments").Where("slug = ?", slug).First(&patient).Error
 	if err != nil {
 		return nil, err
 	}

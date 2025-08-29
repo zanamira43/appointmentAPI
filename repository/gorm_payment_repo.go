@@ -40,7 +40,7 @@ func (r *GormPaymentRepository) GetPayments(page, limit int) ([]models.Payment, 
 // get payment data by id from sql database
 func (r *GormPaymentRepository) GetPayment(id uint) (*models.Payment, error) {
 	var payment models.Payment
-	err := r.DB.Where("id = ?", id).First(&payment).Preload("Patient").Preload("Session").Error
+	err := r.DB.Where("id = ?", id).First(&payment).Error
 	if err != nil {
 		return nil, err
 	}

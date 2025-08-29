@@ -43,7 +43,7 @@ func (r *GormSessionRepository) GetAllSessions(page, limit int) ([]models.Sessio
 // get offer data by id from sql database
 func (r *GormSessionRepository) GetSessionByID(id uint) (*models.Session, error) {
 	var session models.Session
-	err := r.DB.Where("id = ?", id).First(&session).Preload("Patient").Error
+	err := r.DB.Where("id = ?", id).First(&session).Error
 	if err != nil {
 		return nil, err
 	}
