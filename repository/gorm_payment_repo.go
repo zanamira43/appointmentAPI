@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"time"
-
 	"github.com/zanamira43/appointment-api/dto"
 	"github.com/zanamira43/appointment-api/models"
 	"gorm.io/gorm"
@@ -70,7 +68,7 @@ func (r *GormPaymentRepository) UpdatePayment(id uint, dtopayment *dto.PaymentDt
 	if dtopayment.PaymentMethod != "" {
 		payment.PaymentMethod = dtopayment.PaymentMethod
 	}
-	if dtopayment.PaymentDate != (time.Time{}) {
+	if dtopayment.PaymentDate != "" {
 		payment.PaymentDate = dtopayment.PaymentDate
 	}
 	if dtopayment.Status != "" {

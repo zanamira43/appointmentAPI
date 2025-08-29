@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"time"
-
 	"github.com/zanamira43/appointment-api/dto"
 	"github.com/zanamira43/appointment-api/models"
 	"gorm.io/gorm"
@@ -72,7 +70,7 @@ func (r *GormSessionRepository) UpdateSession(id uint, sessionDto *dto.SessionDt
 	if sessionDto.Notes != "" {
 		session.Notes = sessionDto.Notes
 	}
-	if sessionDto.SessionDate != (time.Time{}) {
+	if sessionDto.SessionDate != "" {
 		session.SessionDate = sessionDto.SessionDate
 	}
 

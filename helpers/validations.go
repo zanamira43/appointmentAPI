@@ -3,7 +3,6 @@ package helpers
 import (
 	"errors"
 	"strconv"
-	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/zanamira43/appointment-api/dto"
@@ -69,7 +68,7 @@ func ValidateSession(dto *dto.SessionDto) error {
 		return errors.New("patient is required")
 	}
 
-	if dto.SessionDate == (time.Time{}) {
+	if dto.SessionDate == "" {
 		return errors.New("session date is required")
 	}
 
@@ -91,7 +90,7 @@ func ValidatePayment(dto *dto.PaymentDto) error {
 	if dto.Amount == 0 {
 		return errors.New("amount is required")
 	}
-	if dto.PaymentDate == (time.Time{}) {
+	if dto.PaymentDate == "" {
 		return errors.New("payment date is required")
 	}
 	if dto.Status == "" {
