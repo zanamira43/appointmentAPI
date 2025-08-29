@@ -26,18 +26,18 @@ type PatientRepository interface {
 }
 
 type SessionRepository interface {
-	CreateSession(session *dto.SessionDto) error
+	CreateSession(session *dto.Session) error
 	GetAllSessions() ([]models.Session, error)
 	GetSessionByID(id uint) (*models.Session, error)
-	UpdateSession(id uint, session *dto.SessionDto) (*models.Session, error)
+	UpdateSession(id uint, session *dto.Session) (*models.Session, error)
 	DeleteSession(id uint) error
 }
 
 // payment repository interface
 type PyamentRepository interface {
-	CreatePayments(payment *dto.PaymentDto) error
+	CreatePayments(payment *dto.Payment) error
 	GetAllPayments() ([]models.Payment, error)
 	GetPaymentsByID(id uint) (*models.Payment, error)
-	UpdatePaymentsByID(id uint, payment *dto.PaymentDto) (*models.Payment, error)
+	UpdatePaymentsByID(id uint, payment *dto.Payment) (*models.Payment, error)
 	DeletePaymentsByID(id uint) error
 }

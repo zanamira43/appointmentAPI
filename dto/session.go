@@ -1,6 +1,6 @@
 package dto
 
-type SessionDto struct {
+type Session struct {
 	PatientID   uint   `json:"patient_id"`
 	Duration    int    `json:"duration"` // in minutes
 	Status      string `json:"status"`

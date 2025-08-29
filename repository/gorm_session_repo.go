@@ -15,7 +15,7 @@ func NewGormSessionRepository(db *gorm.DB) *GormSessionRepository {
 }
 
 // insert new offer data into sql database
-func (r *GormSessionRepository) CreateSession(session *dto.SessionDto) error {
+func (r *GormSessionRepository) CreateSession(session *dto.Session) error {
 	return r.DB.Create(&session).Error
 }
 
@@ -51,7 +51,7 @@ func (r *GormSessionRepository) GetSessionByID(id uint) (*models.Session, error)
 }
 
 // update offer data by id from sql database
-func (r *GormSessionRepository) UpdateSession(id uint, sessionDto *dto.SessionDto) (*models.Session, error) {
+func (r *GormSessionRepository) UpdateSession(id uint, sessionDto *dto.Session) (*models.Session, error) {
 	var session models.Session
 	err := r.DB.Where("id = ?", id).First(&session).Error
 	if err != nil {
@@ -83,5 +83,5 @@ func (r *GormSessionRepository) UpdateSession(id uint, sessionDto *dto.SessionDt
 
 // delete offer data by id from sql database
 func (r *GormSessionRepository) DeleteSession(id uint) error {
-	return r.DB.Where("id = ?", id).Delete(&dto.SessionDto{}).Error
+	return r.DB.Where("id = ?", id).Delete(&dto.Session{}).Error
 }

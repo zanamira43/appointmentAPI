@@ -63,7 +63,7 @@ func ValidatePatient(dto *dto.Patient) error {
 }
 
 // validate offer
-func ValidateSession(dto *dto.SessionDto) error {
+func ValidateSession(dto *dto.Session) error {
 	if dto.PatientID == 0 {
 		return errors.New("patient is required")
 	}
@@ -80,7 +80,7 @@ func ValidateSession(dto *dto.SessionDto) error {
 }
 
 // validate service type
-func ValidatePayment(dto *dto.PaymentDto) error {
+func ValidatePayment(dto *dto.Payment) error {
 	if dto.PatientID == 0 {
 		return errors.New("patient is required")
 	}

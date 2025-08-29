@@ -24,7 +24,7 @@ func NewPaymentHandler(Repo *repository.GormPaymentRepository) *PaymentHandler {
 
 // Create New Payment
 func (h *PaymentHandler) CreatePayments(c echo.Context) error {
-	payment := new(dto.PaymentDto)
+	payment := new(dto.Payment)
 
 	if err := c.Bind(&payment); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
@@ -106,7 +106,7 @@ func (h *PaymentHandler) UpdatePayment(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Invalid payment Id")
 	}
 
-	var dto dto.PaymentDto
+	var dto dto.Payment
 	if err := c.Bind(&dto); err != nil {
 		log.Error("Invalid Request data", err.Error())
 		return c.JSON(http.StatusBadRequest, "Invalid Request data")

@@ -24,7 +24,7 @@ func NewSessionHandler(Repo *repository.GormSessionRepository) *SessionHandler {
 
 // Create New session
 func (h *SessionHandler) CreateSessions(c echo.Context) error {
-	sessiondto := new(dto.SessionDto)
+	sessiondto := new(dto.Session)
 
 	if err := c.Bind(&sessiondto); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
@@ -109,7 +109,7 @@ func (h *SessionHandler) UpdateSession(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Invalid Offer Id")
 	}
 
-	var sessionDto dto.SessionDto
+	var sessionDto dto.Session
 	if err := c.Bind(&sessionDto); err != nil {
 		log.Error("Invalid Request data", err.Error())
 		return c.JSON(http.StatusBadRequest, "Invalid Request data")

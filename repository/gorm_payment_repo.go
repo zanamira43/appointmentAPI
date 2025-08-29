@@ -15,7 +15,7 @@ func NewGormPaymentRepository(db *gorm.DB) *GormPaymentRepository {
 }
 
 // insert new  payment type data into sql database
-func (r *GormPaymentRepository) CreatepPayments(payment *dto.PaymentDto) error {
+func (r *GormPaymentRepository) CreatepPayments(payment *dto.Payment) error {
 	return r.DB.Create(&payment).Error
 }
 
@@ -48,7 +48,7 @@ func (r *GormPaymentRepository) GetPayment(id uint) (*models.Payment, error) {
 }
 
 // update payment data by id from sql database
-func (r *GormPaymentRepository) UpdatePayment(id uint, dtopayment *dto.PaymentDto) (*models.Payment, error) {
+func (r *GormPaymentRepository) UpdatePayment(id uint, dtopayment *dto.Payment) (*models.Payment, error) {
 	var payment models.Payment
 	err := r.DB.Where("id = ?", id).First(&payment).Error
 	if err != nil {
@@ -84,5 +84,5 @@ func (r *GormPaymentRepository) UpdatePayment(id uint, dtopayment *dto.PaymentDt
 
 // delete payment data by id from sql database
 func (r *GormPaymentRepository) DeletePayment(id uint) error {
-	return r.DB.Where("id = ?", id).Delete(&dto.PaymentDto{}).Error
+	return r.DB.Where("id = ?", id).Delete(&dto.Payment{}).Error
 }

@@ -1,6 +1,6 @@
 package dto
 
-type PaymentDto struct {
+type Payment struct {
 	PatientID     uint   `json:"patient_id"`
 	SessionID     uint   `json:"session_id"`
 	Amount        int    `json:"amount"`
