@@ -25,8 +25,8 @@ func SetupRoutes(app *echo.Echo) {
 	middleware := middleware.NewMiddleware()
 	api.Use(middleware.IsAuthenticated)
 	api.GET("/user/info", authHandler.User)
-	api.GET("/user/updateinfo", authHandler.UpdateInfo)
-	api.GET("/user/updatepassword", authHandler.UpdatePassword)
+	api.POST("/user/updateinfo", authHandler.UpdateInfo)
+	api.POST("/user/updatepassword", authHandler.UpdatePassword)
 	api.POST("/user/logout", authHandler.Logout)
 
 	// patient routes
