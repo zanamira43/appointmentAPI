@@ -78,6 +78,11 @@ func (r *GormPatientRepository) UpdatePatient(id uint, dtoPatient *dto.Patient) 
 	if dtoPatient.Age != 0 {
 		patient.Age = dtoPatient.Age
 	}
+
+	if dtoPatient.MarriedStatus != "" {
+		patient.MarriedStatus = dtoPatient.MarriedStatus
+	}
+
 	if dtoPatient.Profession != "" {
 		patient.Profession = dtoPatient.Profession
 	}

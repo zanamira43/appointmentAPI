@@ -10,13 +10,14 @@ import (
 )
 
 type Patient struct {
-	Slug        string `json:"slug" gorm:"unique;index"`
-	Name        string `json:"name"`
-	Gender      string `json:"gender"`
-	Age         int    `json:"age"`
-	Profession  string `json:"profession"`
-	Address     string `json:"address"`
-	PhoneNumber string `json:"phone_number"`
+	Slug          string `json:"slug" gorm:"unique;index"`
+	Name          string `json:"name"`
+	Gender        string `json:"gender"`
+	Age           int    `json:"age"`
+	MarriedStatus string `json:"married_status"`
+	Profession    string `json:"profession"`
+	Address       string `json:"address"`
+	PhoneNumber   string `json:"phone_number"`
 }
 
 func (p *Patient) BeforeCreate(tx *gorm.DB) error {
