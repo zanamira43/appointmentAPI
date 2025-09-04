@@ -34,6 +34,28 @@ func ValidateRegisterUser(dto *dto.Register) error {
 	return nil
 }
 
+func ValidateUser(dto *dto.UserRequest) error {
+	if dto.FirstName == "" {
+		return errors.New("first name is required")
+	}
+	if dto.LastName == "" {
+		return errors.New("last name  is required")
+	}
+
+	if dto.Phone == "" {
+		return errors.New("phone is required")
+	}
+
+	if dto.Password == "" {
+		return errors.New("password is required")
+	}
+
+	if dto.Role == "" {
+		return errors.New("role	 is required")
+	}
+	return nil
+}
+
 // validate patient
 func ValidatePatient(dto *dto.Patient) error {
 	if dto.Name == "" {
@@ -49,6 +71,10 @@ func ValidatePatient(dto *dto.Patient) error {
 
 	if dto.Age == 0 {
 		return errors.New("age is required")
+	}
+
+	if dto.MarriedStatus == " " {
+		return errors.New("married status is required")
 	}
 
 	if dto.Profession == "" {

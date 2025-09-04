@@ -10,7 +10,7 @@ type UserRepository interface {
 	CreateUser(user *dto.User) error
 	GetAllUsers() ([]models.User, error)
 	GetUserByID(id string) (*models.User, error)
-	GetUserByEmail(email string) (*models.User, error)
+	GetUserByPhone(phone_number string) (*models.User, error)
 	UpdateUser(id string, user *dto.User) (*models.User, error)
 	DeleteUser(id string) error
 }

@@ -5,14 +5,15 @@ import (
 )
 
 type Patient struct {
-	ID          uint   `json:"id" gorm:"primaryKey"`
-	Slug        string `json:"slug" gorm:"unique;index"`
-	Name        string `json:"name"`
-	Gender      string `json:"gender"`
-	Age         int    `json:"age"`
-	Profession  string `json:"profession"`
-	Address     string `json:"address"`
-	PhoneNumber string `json:"phone_number"`
+	ID            uint   `json:"id" gorm:"primaryKey"`
+	Slug          string `json:"slug" gorm:"unique;index"`
+	Name          string `json:"name"`
+	Gender        string `json:"gender"`
+	Age           int    `json:"age"`
+	MarriedStatus string `json:"married_status"`
+	Profession    string `json:"profession"`
+	Address       string `json:"address"`
+	PhoneNumber   string `json:"phone_number"`
 
 	Payments []Payment `json:"payments"`
 	Sessions []Session `json:"sessions"`

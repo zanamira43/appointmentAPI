@@ -53,6 +53,7 @@ func (h *Auth) SignUP(c echo.Context) error {
 		LastName:  data.LastName,
 		Email:     data.Email,
 		Phone:     data.Phone,
+		Role:      "admin",
 	}
 
 	// hashing password

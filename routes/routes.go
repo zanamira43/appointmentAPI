@@ -56,4 +56,13 @@ func SetupRoutes(app *echo.Echo) {
 	api.GET("/payments/:id", PaymentHandler.GetPayment)
 	api.PUT("/payments/:id", PaymentHandler.UpdatePayment)
 	api.DELETE("/payments/:id", PaymentHandler.DeletePayment)
+
+	// user routes end points
+	userRepo = repository.NewGormUserRepository(database.DB)
+	userHandler := handlers.NewUserHandler(userRepo)
+	api.POST("/users", userHandler.CreateUser)
+	api.GET("/users", userHandler.GetAllUsers)
+	api.GET("/users/:id", userHandler.GetUser)
+	api.PUT("/users/:id", userHandler.UpdateUser)
+	api.DELETE("/users/:id", userHandler.DeleteUser)
 }

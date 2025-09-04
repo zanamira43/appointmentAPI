@@ -75,6 +75,10 @@ func (r *GormUserRepository) UpdateUser(id uint, updateuser *dto.User) (*models.
 		user.Password = updateuser.Password
 	}
 
+	if updateuser.Role != "" {
+		user.Role = updateuser.Role
+	}
+
 	err = r.DB.Save(&user).Error
 	if err != nil {
 		return nil, err
