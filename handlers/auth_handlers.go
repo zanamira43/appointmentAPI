@@ -54,6 +54,7 @@ func (h *Auth) SignUP(c echo.Context) error {
 		Email:     data.Email,
 		Phone:     data.Phone,
 		Role:      "admin",
+		Active:    true,
 	}
 
 	// hashing password
@@ -91,11 +92,19 @@ func (h *Auth) Login(c echo.Context) error {
 		})
 	}
 
+	// checking user status
+	if !user.Active {
+		log.Error("user is not active")
+		return c.JSON(http.StatusUnauthorized, echo.Map{
+			"message": "user is not active",
+		})
+	}
+
 	// checking hashing password
 	err = user.ComparedPassword(data.Password)
 	if err != nil {
 		log.Error("incorrect password", err.Error())
-		return c.JSON(http.StatusInternalServerError, echo.Map{
+		return c.JSON(http.StatusUnprocessableEntity, echo.Map{
 			"message": "incorrect password",
 		})
 	}

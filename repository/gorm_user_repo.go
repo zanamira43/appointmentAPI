@@ -79,6 +79,10 @@ func (r *GormUserRepository) UpdateUser(id uint, updateuser *dto.User) (*models.
 		user.Role = updateuser.Role
 	}
 
+	if updateuser.Active != user.Active {
+		user.Active = updateuser.Active
+	}
+
 	err = r.DB.Save(&user).Error
 	if err != nil {
 		return nil, err

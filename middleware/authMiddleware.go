@@ -30,3 +30,17 @@ func (m *Middleware) IsAuthenticated(next echo.HandlerFunc) echo.HandlerFunc {
 		return next(c)
 	}
 }
+
+func (m *Middleware) IsUserAdmin(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		userRepo := repository.NewGormUserRepository(database.DB)
+		authHandler := handlers.NewAuth(userRepo)
+		user, _ := authHandler.GetUserByCookie(c)
+		if user.Role != "admin" {
+			log.Error("Sorry! User Is Not Admin")
+			return c.JSON(http.StatusForbidden, "Sorry! User Is Not Admin")
+		}
+
+		return next(c)
+	}
+}

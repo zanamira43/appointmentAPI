@@ -36,6 +36,7 @@ func (h *UserHandler) CreateUser(c echo.Context) error {
 		Email:     newUser.Email,
 		Phone:     newUser.Phone,
 		Role:      newUser.Role,
+		Active:    newUser.Active,
 	}
 
 	user.SetPassword(newUser.Password)
