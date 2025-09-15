@@ -54,28 +54,34 @@ func (h *PatientHandler) GetAllPatients(c echo.Context) error {
 	// Parse pagination parameters
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil || page < 1 {
-		page = 1
+		page = 0
 	}
 
 	limit, err := strconv.Atoi(c.QueryParam("limit"))
 	if err != nil || limit < 1 {
-		limit = 10 // default limit
+		limit = 10
 	}
 
 	// Optional: Set maximum limit to prevent abuse
 	if limit > 100 {
 		limit = 100
 	}
+
 	patients, total, err := h.PatientRepository.GetAllPatients(page, limit, search)
 	if err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "Failed to get patients")
 	}
 
-	// Calculate pagination metadata
-	totalPages := int(math.Ceil(float64(total) / float64(limit)))
-	hasNext := page < totalPages
-	hasPrev := page > 1
+	// Calculate pagination metadata (only if paginated)
+	var totalPages int
+	var hasNext, hasPrev bool
+
+	if page > 0 && limit > 0 {
+		totalPages = int(math.Ceil(float64(total) / float64(limit)))
+		hasNext = page < totalPages
+		hasPrev = page > 1
+	}
 	// Return the response
 	responses := response.PaginatedResponse{
 		Data:       patients,

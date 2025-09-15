@@ -22,18 +22,28 @@ func (r *GormPatientRepository) CreatePatient(patient *dto.Patient) error {
 // get all patient data from sql database
 func (r *GormPatientRepository) GetAllPatients(page, limit int, search string) ([]models.Patient, int64, error) {
 	var patients []models.Patient
-
 	var total int64
 
-	offset := (page - 1) * limit
+	// create blank query to build upon
+	query := r.DB.Model(&models.Patient{})
+
+	if search != "" {
+		searchPattern := "%" + search + "%"
+		query = query.Where("name LIKE ? OR slug LIKE ? OR phone_number LIKE ?", searchPattern, searchPattern, searchPattern)
+	}
 
 	// get total number of patients
-	err := r.DB.Model(&patients).Count(&total).Error
+	err := query.Count(&total).Error
 	if err != nil {
 		return nil, 0, err
 	}
 
-	err = r.DB.Offset(offset).Limit(limit).Where("name LIKE ?", "%"+search+"%").Or("slug LIKE ?", "%"+search+"%").Or("phone_number LIKE ?", "%"+search+"%").Find(&patients).Error
+	if page > 0 && limit > 0 {
+		offset := (page - 1) * limit
+		query = query.Offset(offset).Limit(limit)
+	}
+
+	err = query.Find(&patients).Error
 	if err != nil {
 		return nil, 0, err
 	}
