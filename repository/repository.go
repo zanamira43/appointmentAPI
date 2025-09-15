@@ -41,3 +41,11 @@ type PyamentRepository interface {
 	UpdatePaymentsByID(id uint, payment *dto.Payment) (*models.Payment, error)
 	DeletePaymentsByID(id uint) error
 }
+
+type AppointmentScheduleRepository interface {
+	CreateAppointments(ap *dto.AppointmentSchedule) error
+	GetAllAppointments() ([]models.AppointmentSchedule, error)
+	GetAppointmentByID(id uint) (*models.AppointmentSchedule, error)
+	UpdateAppointmentByID(id uint, ap *dto.AppointmentSchedule) (*models.AppointmentSchedule, error)
+	DeleteAppointmentByID(id uint) error
+}

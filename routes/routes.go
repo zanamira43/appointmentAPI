@@ -65,4 +65,13 @@ func SetupRoutes(app *echo.Echo) {
 	api.GET("/users/:id", userHandler.GetUser, middleware.IsUserAdmin)
 	api.PUT("/users/:id", userHandler.UpdateUser, middleware.IsUserAdmin)
 	api.DELETE("/users/:id", userHandler.DeleteUser, middleware.IsUserAdmin)
+
+	// appointment schedule routes end points
+	appointmentRepo := repository.NewGormAppointmentScheduleRepository(database.DB)
+	appointmentHandler := handlers.NewAppointmentHandler(appointmentRepo)
+	api.GET("/appointments", appointmentHandler.GetAppointments)
+	api.POST("/appointments", appointmentHandler.CreateAppointments)
+	api.GET("/appointments/:id", appointmentHandler.GetAppointment)
+	api.PUT("/appointments/:id", appointmentHandler.UpdateAppointment)
+	api.DELETE("/appointments/:id", appointmentHandler.DeleteAppointment)
 }

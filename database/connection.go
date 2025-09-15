@@ -44,6 +44,7 @@ func Connect() error {
 		&models.Patient{},
 		&models.Payment{},
 		&models.Session{},
+		&models.AppointmentSchedule{},
 	)
 
 	return nil
