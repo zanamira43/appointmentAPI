@@ -126,25 +126,21 @@ func ValidatePayment(dto *dto.Payment) error {
 	return nil
 }
 
-func ValidateAppointments(dto *dto.AppointmentSchedule) error {
+func ValidateTimeTables(dto *dto.TimeTable) error {
 
 	if dto.PatientName == "" {
 		return errors.New("patient name is required")
 	}
-	if dto.WeekDay == "" {
+	if len(dto.WeekDay) == 0 {
 		return errors.New("week day is required")
 	}
-	if dto.Date == "" {
-		return errors.New("date is required")
-	}
+
 	if dto.StartTime == "" {
 		return errors.New("start time is required")
 	}
 	if dto.EndTime == "" {
 		return errors.New("end time is required")
 	}
-	if dto.Status == "" {
-		return errors.New("status is required")
-	}
+
 	return nil
 }

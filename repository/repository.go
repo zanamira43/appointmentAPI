@@ -42,10 +42,10 @@ type PyamentRepository interface {
 	DeletePaymentsByID(id uint) error
 }
 
-type AppointmentScheduleRepository interface {
-	CreateAppointments(ap *dto.AppointmentSchedule) error
-	GetAllAppointments() ([]models.AppointmentSchedule, error)
-	GetAppointmentByID(id uint) (*models.AppointmentSchedule, error)
-	UpdateAppointmentByID(id uint, ap *dto.AppointmentSchedule) (*models.AppointmentSchedule, error)
-	DeleteAppointmentByID(id uint) error
+type TimeTableRepository interface {
+	CreateTimeTables(dtt *dto.TimeTable) error
+	GetAllTimeTables() ([]models.TimeTable, error)
+	GetTimeTableByID(id uint) (*models.TimeTable, error)
+	UpdateTimeTableByID(id uint, dtt *dto.TimeTable) (*models.TimeTable, error)
+	DeleteTimeTableByID(id uint) error
 }

@@ -67,11 +67,11 @@ func SetupRoutes(app *echo.Echo) {
 	api.DELETE("/users/:id", userHandler.DeleteUser, middleware.IsUserAdmin)
 
 	// appointment schedule routes end points
-	appointmentRepo := repository.NewGormAppointmentScheduleRepository(database.DB)
-	appointmentHandler := handlers.NewAppointmentHandler(appointmentRepo)
-	api.GET("/appointments", appointmentHandler.GetAppointments)
-	api.POST("/appointments", appointmentHandler.CreateAppointments)
-	api.GET("/appointments/:id", appointmentHandler.GetAppointment)
-	api.PUT("/appointments/:id", appointmentHandler.UpdateAppointment)
-	api.DELETE("/appointments/:id", appointmentHandler.DeleteAppointment)
+	timeTableRepo := repository.NewGormTimeTableRepository(database.DB)
+	timeTableHandler := handlers.NewTimeTableHandler(timeTableRepo)
+	api.GET("/timetables", timeTableHandler.GetTimeTables)
+	api.POST("/timetables", timeTableHandler.CreateTimeTables)
+	api.GET("/timetables/:id", timeTableHandler.GetTimeTable)
+	api.PUT("/timetables/:id", timeTableHandler.UpdateTimeTable)
+	api.DELETE("/timetables/:id", timeTableHandler.DeleteTimeTable)
 }
