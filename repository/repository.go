@@ -12,6 +12,7 @@ type UserRepository interface {
 	GetUserByID(id string) (*models.User, error)
 	GetUserByPhone(phone_number string) (*models.User, error)
 	UpdateUser(id string, user *dto.User) (*models.User, error)
+	UpdateUserPassword(id string, user *dto.User) (*models.User, error)
 	DeleteUser(id string) error
 }
 
