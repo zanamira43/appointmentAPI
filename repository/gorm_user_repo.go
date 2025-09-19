@@ -71,16 +71,30 @@ func (r *GormUserRepository) UpdateUser(id uint, updateuser *dto.User) (*models.
 		user.Phone = updateuser.Phone
 	}
 
-	if updateuser.Password != nil {
-		user.Password = updateuser.Password
-	}
-
 	if updateuser.Role != "" {
 		user.Role = updateuser.Role
 	}
 
 	if updateuser.Active != user.Active {
 		user.Active = updateuser.Active
+	}
+
+	err = r.DB.Save(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
+// update single user
+func (r *GormUserRepository) UpdateUserPassword(id uint, updateuser *dto.User) (*models.User, error) {
+	user, err := r.GetUserByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	if updateuser.Password != nil {
+		user.Password = updateuser.Password
 	}
 
 	err = r.DB.Save(&user).Error

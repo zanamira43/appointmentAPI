@@ -222,7 +222,7 @@ func (h *Auth) UpdatePassword(c echo.Context) error {
 	}
 
 	// update user password
-	user, err = h.Repo.UpdateUser(user.ID, updatepassword)
+	user, err = h.Repo.UpdateUserPassword(user.ID, updatepassword)
 	if err != nil {
 		log.Error("Failed to update password", err.Error())
 		return c.JSON(http.StatusInternalServerError, "Failed to update password")

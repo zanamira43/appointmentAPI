@@ -97,6 +97,37 @@ func (h *UserHandler) UpdateUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
+func (h *UserHandler) UpdateUserPassword(c echo.Context) error {
+	id, err := helpers.GetParam(c)
+	if err != nil {
+		log.Error("Invalid User Id", err.Error())
+		return c.JSON(http.StatusBadRequest, "Invalid User Id")
+	}
+
+	var data dto.UserPassword
+	if err := c.Bind(&data); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	// comparing the password
+	if data.Password != data.PasswordConfirm {
+		log.Error("password does not match")
+		return c.JSON(http.StatusBadRequest, "password does not match")
+	}
+
+	// hashing new password
+	updatepassword := new(dto.User)
+	updatepassword.SetPassword(data.Password)
+
+	user, err := h.UserRepository.UpdateUserPassword(id, updatepassword)
+	if err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusInternalServerError, "User Not Found")
+	}
+
+	return c.JSON(http.StatusOK, user)
+}
+
 // delete user
 func (h *UserHandler) DeleteUser(c echo.Context) error {
 	id, err := helpers.GetParam(c)

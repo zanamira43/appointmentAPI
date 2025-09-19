@@ -64,6 +64,7 @@ func SetupRoutes(app *echo.Echo) {
 	api.GET("/users", userHandler.GetAllUsers, middleware.IsUserAdmin)
 	api.GET("/users/:id", userHandler.GetUser, middleware.IsUserAdmin)
 	api.PUT("/users/:id", userHandler.UpdateUser, middleware.IsUserAdmin)
+	api.PUT("/users/:id/password", userHandler.UpdateUserPassword, middleware.IsUserAdmin)
 	api.DELETE("/users/:id", userHandler.DeleteUser, middleware.IsUserAdmin)
 
 	// appointment schedule routes end points

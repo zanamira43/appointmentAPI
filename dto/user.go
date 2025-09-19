@@ -24,6 +24,11 @@ type User struct {
 	Active    bool   `json:"active"`
 }
 
+type UserPassword struct {
+	Password        string `json:"password"`
+	PasswordConfirm string `json:"password_confirmation"`
+}
+
 // hashing user password before store it in database
 func (user *User) SetPassword(password string) {
 	HashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 14)
