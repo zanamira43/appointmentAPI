@@ -40,8 +40,8 @@ func SendEmail(to, subject, body string) error {
 func StartDailyEmailJob() {
 	c := cron.New()
 
-	// Runs every day at 6 AM
-	c.AddFunc("0 6 * * *", func() {
+	// Runs every day at 4 AM
+	c.AddFunc("0 4 * * *", func() {
 		today := time.Now().Weekday().String() // e.g., "Monday"
 		NotifyUsersByDay(today)
 	})
