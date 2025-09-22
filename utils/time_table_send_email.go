@@ -50,7 +50,6 @@ func StartDailyEmailJob() {
 }
 
 func NotifyUsersByDay(dayName string) {
-
 	// Fetch records from DB where DayName == dayName
 	timeTableRepo := repository.NewGormTimeTableRepository(database.DB)
 	records, err := timeTableRepo.GetTimeTableForDay(dayName)
