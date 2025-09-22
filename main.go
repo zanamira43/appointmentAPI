@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/zanamira43/appointment-api/database"
 	"github.com/zanamira43/appointment-api/routes"
+	"github.com/zanamira43/appointment-api/utils"
 )
 
 func main() {
@@ -44,6 +45,9 @@ func main() {
 
 	// setup routes
 	routes.SetupRoutes(e)
+
+	// send daily email
+	go utils.StartDailyEmailJob()
 
 	e.Logger.Fatal(e.Start(os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT")))
 }

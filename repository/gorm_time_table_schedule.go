@@ -1,8 +1,11 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/zanamira43/appointment-api/dto"
 	"github.com/zanamira43/appointment-api/models"
+	"github.com/zanamira43/appointment-api/response"
 	"gorm.io/gorm"
 )
 
@@ -33,7 +36,7 @@ func (r *GormTimeTableRepository) CreateTimeTables(aps *dto.TimeTable, UserID ui
 	return r.DB.Create(&request).Error
 }
 
-// get all appointments repository
+// get all time tables repository
 func (r *GormTimeTableRepository) GetAllTimeTables(page, limit int, search string) ([]models.TimeTable, int64, error) {
 	var tts []models.TimeTable
 	var total int64
@@ -64,7 +67,7 @@ func (r *GormTimeTableRepository) GetAllTimeTables(page, limit int, search strin
 	return tts, total, nil
 }
 
-// get single appointment repository
+// get single time table repository
 func (r *GormTimeTableRepository) GetTimeTableByID(id uint) (*models.TimeTable, error) {
 	var tt models.TimeTable
 	err := r.DB.Preload("User").First(&tt, id).Error
@@ -72,6 +75,34 @@ func (r *GormTimeTableRepository) GetTimeTableByID(id uint) (*models.TimeTable, 
 		return nil, err
 	}
 	return &tt, nil
+}
+
+// get all  time tables by week day repository
+func convertTo12Hour(timeStr string) string {
+	t, err := time.Parse("15:04:00", timeStr)
+	if err != nil {
+		return timeStr // return original if parsing fails
+	}
+	return t.Format("3:04 PM")
+}
+func (r *GormTimeTableRepository) GetTimeTableForDay(day string) (*[]response.TimeTableForDay, error) {
+	var timeTables []models.TimeTable
+	err := r.DB.Where("JSON_SEARCH(week_day, 'one', ?) IS NOT NULL", day).Find(&timeTables).Error
+	if err != nil {
+		return nil, err
+	}
+
+	var result []response.TimeTableForDay
+	for _, tt := range timeTables {
+		result = append(result, response.TimeTableForDay{
+			ID:          tt.ID,
+			PatientName: tt.PatientName,
+			StartTime:   convertTo12Hour(tt.StartTime),
+			EndTime:     convertTo12Hour(tt.EndTime),
+		})
+	}
+
+	return &result, nil
 }
 
 // update appointment repository
