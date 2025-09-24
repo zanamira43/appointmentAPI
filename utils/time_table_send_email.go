@@ -38,11 +38,17 @@ func SendEmail(to, subject, body string) error {
 }
 
 func StartDailyEmailJob() {
-	c := cron.New()
+	// Load Baghdad timezone
+	loc, err := time.LoadLocation("Asia/Baghdad")
+	if err != nil {
+		panic("Failed to load timezone: " + err.Error())
+	}
+
+	c := cron.New(cron.WithLocation(loc))
 
 	// Runs every day at 4 AM
-	c.AddFunc("0 4 * * *", func() {
-		today := time.Now().Weekday().String() // e.g., "Monday"
+	c.AddFunc("0 6 * * *", func() {
+		today := time.Now().In(loc).Weekday().String() // e.g., "Monday"
 		NotifyUsersByDay(today)
 	})
 
