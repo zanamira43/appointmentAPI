@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	_ "time/tzdata"
 
 	"github.com/joho/godotenv"
 	"github.com/robfig/cron/v3"
@@ -47,8 +48,8 @@ func StartDailyEmailJob() {
 	c := cron.New(cron.WithLocation(loc))
 
 	// Runs every day at 4 AM
-	c.AddFunc("0 15 * * *", func() {
-		today := time.Now().In(loc).Weekday().String() // e.g., "Monday"
+	c.AddFunc("15 15 * * *", func() {
+		today := time.Now().In(loc).Weekday().String() // Get today's day
 		NotifyUsersByDay(today)
 	})
 
