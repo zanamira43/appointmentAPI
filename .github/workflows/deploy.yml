@@ -54,4 +54,7 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           cd /opt/appointment-api
-          ./deploy.sh
+          git pull origin main
+          /usr/local/go/bin/go mod download
+          /usr/local/go/bin/go build -o main .
+          sudo systemctl restart appointment-api.service
