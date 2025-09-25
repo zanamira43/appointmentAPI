@@ -33,11 +33,11 @@ jobs:
     - name: Run tests
       run: go test -v ./...
       env:
-        DB_HOST: localhost
-        DB_PORT: 3306
-        DB_USER: root
-        DB_PASSWORD: Web2683@
-        DB_NAME: clinicAppointment
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_NAME: ${{ secrets.DB_NAME }}
 
   deploy:
     needs: test
