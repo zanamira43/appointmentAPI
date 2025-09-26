@@ -50,6 +50,11 @@ func (h *PatientHandler) CreatePatient(c echo.Context) error {
 func (h *PatientHandler) GetAllPatients(c echo.Context) error {
 	// parse Search parameters
 	search := c.QueryParam("search")
+	searchByCode := c.QueryParam("searchByCode")
+
+	if searchByCode != "" {
+		search = searchByCode
+	}
 
 	// Parse pagination parameters
 	page, err := strconv.Atoi(c.QueryParam("page"))
