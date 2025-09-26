@@ -47,7 +47,7 @@ func main() {
 	routes.SetupRoutes(e)
 
 	// send daily email
-	go utils.StartDailyEmailJob()
+	utils.StartDailyEmailJob()
 
 	e.Logger.Fatal(e.Start(os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT")))
 }
