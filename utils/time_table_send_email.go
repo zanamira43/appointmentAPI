@@ -48,7 +48,7 @@ func StartDailyEmailJob() {
 	c := cron.New(cron.WithLocation(loc))
 
 	// Runs every day at 4 AM
-	c.AddFunc("* * * * *", func() {
+	c.AddFunc("0 4 * * *", func() {
 
 		defer func() {
 			if r := recover(); r != nil {
