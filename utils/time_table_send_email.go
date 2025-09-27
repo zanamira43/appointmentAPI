@@ -48,11 +48,11 @@ func StartDailyEmailJob() {
 	c := cron.New(cron.WithLocation(loc))
 
 	// Runs every day at 4 AM
-	// c.AddFunc("0 4 * * *", func() {
-	log.Printf("Test cron job running at: %v", time.Now())
-	today := time.Now().In(loc).Weekday().String() // Get today's day
-	NotifyUsersByDay(today)
-	// })
+	c.AddFunc("0 11 * * *", func() {
+		log.Printf("Test cron job running at: %v", time.Now())
+		today := time.Now().In(loc).Weekday().String() // Get today's day
+		NotifyUsersByDay(today)
+	})
 
 	c.Start()
 }
