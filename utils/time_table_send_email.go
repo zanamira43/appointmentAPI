@@ -26,8 +26,8 @@ func SendEmail(to, subject, body string) error {
 	from := os.Getenv("SMTP_EMAIL")
 	password := os.Getenv("SMTP_PASSWORD")
 
-	smtpHost := "smtp.gmail.com"
-	smtpPort := "587"
+	smtpHost := os.Getenv("SMTP_HOST")
+	smtpPort := os.Getenv("SMTP_PORT")
 
 	msg := []byte("To: " + to + "\r\n" +
 		"Subject: " + subject + "\r\n" +
@@ -48,7 +48,7 @@ func StartDailyEmailJob() {
 	c := cron.New(cron.WithLocation(loc))
 
 	// Runs every day at 4 AM
-	c.AddFunc("0 4 * * *", func() {
+	c.AddFunc("45 17 * * *", func() {
 		log.Printf("Test cron job running at: %v", time.Now())
 		today := time.Now().In(loc).Weekday().String() // Get today's day
 		NotifyUsersByDay(today)
