@@ -27,7 +27,7 @@ func SendEmail(to, subject, body string) error {
 	password := os.Getenv("SMTP_PASSWORD")
 
 	smtpHost := "smtp.gmail.com"
-	smtpPort := 465
+	smtpPort := "465"
 
 	msg := []byte("To: " + to + "\r\n" +
 		"Subject: " + subject + "\r\n" +
