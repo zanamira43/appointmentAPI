@@ -50,3 +50,11 @@ type TimeTableRepository interface {
 	UpdateTimeTableByID(id uint, dtt *dto.TimeTable) (*models.TimeTable, error)
 	DeleteTimeTableByID(id uint) error
 }
+type ProblemRepository interface {
+	CreateProblems(problem *dto.Problem) error
+	GetAllProblems() ([]models.Problem, error)
+	GetProblemByID(id uint) (*models.Problem, error)
+	GetProblemByPatientId(patientId uint) (*models.Problem, error)
+	UpdateProblemByID(id uint, problem *dto.Problem) (*models.Problem, error)
+	DeleteProblemByID(id uint) error
+}

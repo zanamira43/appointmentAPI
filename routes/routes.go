@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/zanamira43/appointment-api/database"
 	"github.com/zanamira43/appointment-api/handlers"
+	"github.com/zanamira43/appointment-api/helpers"
 	"github.com/zanamira43/appointment-api/middleware"
 	"github.com/zanamira43/appointment-api/repository"
 )
@@ -75,4 +76,22 @@ func SetupRoutes(app *echo.Echo) {
 	api.GET("/timetables/:id", timeTableHandler.GetTimeTable)
 	api.PUT("/timetables/:id", timeTableHandler.UpdateTimeTable)
 	api.DELETE("/timetables/:id", timeTableHandler.DeleteTimeTable)
+
+	// problem  routes end points
+	problemRepo := repository.NewGormProblemRepository(database.DB)
+	problemHandler := handlers.NewProblemHandler(problemRepo)
+	api.POST("/problems", problemHandler.CreateProblem, middleware.IsUserAdmin)
+	api.GET("/problems", problemHandler.GetProblems, middleware.IsUserAdmin)
+	api.GET("/problems/:id", problemHandler.GetProblem, middleware.IsUserAdmin)
+	api.GET("/problems/patient/:id", problemHandler.GetProblemByPatientId, middleware.IsUserAdmin)
+	api.PUT("/problems/:id", problemHandler.UpdateProblem, middleware.IsUserAdmin)
+	api.DELETE("/problems/:id", problemHandler.DeleteProblem, middleware.IsUserAdmin)
+
+	// patient images end points
+	// get image
+	api.Static("/image", "./uploads")
+	// upload image route endpoints for categories
+	api.POST("/image/upload", helpers.UploadImage, middleware.IsUserAdmin)
+	// remove patient image from storage
+	api.POST("/image/delete", problemHandler.DeletePatientImageUrl, middleware.IsUserAdmin)
 }

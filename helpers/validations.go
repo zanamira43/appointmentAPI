@@ -144,3 +144,26 @@ func ValidateTimeTables(dto *dto.TimeTable) error {
 
 	return nil
 }
+
+func ValidateProblems(dto *dto.Problem) error {
+	if dto.PatientID == 0 {
+		return errors.New("patient is required")
+	}
+
+	if len(dto.MianpProblems) == 0 {
+		return errors.New("main problems is required")
+	}
+
+	if len(dto.SecondaryProblems) == 0 {
+		return errors.New("secondary problems is required")
+	}
+
+	if dto.NeedSessionsCount == 0 {
+		return errors.New("need sessions count is required")
+	}
+
+	if dto.SessionPrice == 0 {
+		return errors.New("session price is required")
+	}
+	return nil
+}

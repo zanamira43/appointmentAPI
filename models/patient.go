@@ -15,6 +15,8 @@ type Patient struct {
 	Address       string `json:"address"`
 	PhoneNumber   string `json:"phone_number"`
 
+	Problem Problem `json:"problem"`
+
 	Payments []Payment `json:"payments"`
 	Sessions []Session `json:"sessions"`
 
