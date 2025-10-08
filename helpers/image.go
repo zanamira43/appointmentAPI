@@ -60,8 +60,25 @@ func UploadImage(c echo.Context) error {
 		return err
 	}
 
+	// Determine scheme (http/https)
+	scheme := c.Scheme() // uses Echo's detection; works with TLS or forwarded headers if middleware is set
+	if scheme == "" {
+		// Fallbacks if needed
+		req := c.Request()
+		if xfProto := req.Header.Get("X-Forwarded-Proto"); xfProto != "" {
+			scheme = xfProto
+		} else if req.TLS != nil {
+			scheme = "https"
+		} else {
+			scheme = "http"
+		}
+	}
+
+	host := c.Request().Host
+	imageURL := fmt.Sprintf("%s://%s/api/image/%s", scheme, host, file.Filename)
+
 	return c.JSON(http.StatusOK, echo.Map{
-		"patient_image_url": c.Request().Host + "/api/image/" + file.Filename,
+		"patient_image_url": imageURL,
 	})
 }
 
