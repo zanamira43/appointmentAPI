@@ -8,7 +8,7 @@ type Session struct {
 	Subject            string `json:"subject"`
 	CommunicationTypes string `json:"communication_types"`
 	SessionDate        string `json:"session_date"`
-	Duration           int    `json:"duration"` // in minutes
+	Detail             string `json:"detail" gorm:"type:longtext"`
 	Status             string `json:"status"`
 
 	Patient   Patient   `json:"-" gorm:"foreignKey:PatientID;constraint:OnDelete:SET NULL;"`

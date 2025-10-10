@@ -77,7 +77,7 @@ func (r *GormSessionRepository) GetSessionsByPatientID(page, limit int, search s
 		query = query.Offset(offset).Limit(limit)
 	}
 
-	err = query.Order("session_date desc").Find(&sessions).Error
+	err = query.Find(&sessions).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -118,8 +118,8 @@ func (r *GormSessionRepository) UpdateSession(id uint, sessionDto *dto.Session) 
 		session.SessionDate = sessionDto.SessionDate
 	}
 
-	if session.Duration != 0 {
-		session.Duration = sessionDto.Duration
+	if session.Detail != "" {
+		session.Detail = sessionDto.Detail
 	}
 	if sessionDto.Status != "" {
 		session.Status = sessionDto.Status

@@ -5,6 +5,6 @@ type Session struct {
 	Subject            string `json:"subject"`
 	CommunicationTypes string `json:"communication_types"`
 	SessionDate        string `json:"session_date"`
-	Duration           int    `json:"duration"` // in minutes
+	Detail             string `json:"detail"`
 	Status             string `json:"status"`
 }
