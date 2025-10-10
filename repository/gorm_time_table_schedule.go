@@ -46,7 +46,7 @@ func (r *GormTimeTableRepository) GetAllTimeTables(page, limit int, search strin
 
 	if search != "" {
 		searchPattern := "%" + search + "%"
-		query = query.Where("patient_name LIKE ? OR week_day LIKE ?", searchPattern, searchPattern)
+		query = query.Where("patient_name LIKE ? OR week_day LIKE ? OR start_time LIKE ?", searchPattern, searchPattern, searchPattern)
 	}
 
 	err := query.Count(&total).Error
