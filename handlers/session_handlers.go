@@ -46,6 +46,10 @@ func (h *SessionHandler) CreateSessions(c echo.Context) error {
 
 // Get all sessions
 func (h *SessionHandler) GetSessions(c echo.Context) error {
+	// parse Search parameters
+	search := c.QueryParam("search")
+
+	// Parse pagination parameters
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil || page < 1 {
 		page = 1
@@ -61,23 +65,84 @@ func (h *SessionHandler) GetSessions(c echo.Context) error {
 		limit = 100
 	}
 
-	sessions, total, err := h.SessionRepository.GetAllSessions(page, limit)
+	sessions, total, err := h.SessionRepository.GetAllSessions(page, limit, search)
 	if err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "Failed to get sessions")
 	}
 
 	// Calculate pagination metadata
-	totalPages := int(math.Ceil(float64(total) / float64(limit)))
-	hasNext := page < totalPages
-	hasPrev := page > 1
+	var totalPages int
+	var hasNext, hasPrev bool
+
+	if page > 0 && limit > 0 {
+		totalPages = int(math.Ceil(float64(total) / float64(limit)))
+		hasNext = page < totalPages
+		hasPrev = page > 1
+	}
 
 	response := response.PaginatedResponse{
 		Data:       sessions,
 		Page:       page,
 		Limit:      limit,
 		Total:      total,
-		TotalPages: totalPages,
+		TotalPages: int(total / (int64(limit))),
+		HasNext:    hasNext,
+		HasPrev:    hasPrev,
+	}
+
+	return c.JSON(http.StatusOK, response)
+}
+
+// Get all sessions by patient id
+func (h *SessionHandler) GetSessionsByPatientId(c echo.Context) error {
+	patientId, err := helpers.GetParam(c)
+	if err != nil {
+		log.Error("Invalid patient Id", err.Error())
+		return c.JSON(http.StatusBadRequest, "Invalid patient Id")
+	}
+
+	// parse Search parameters
+	search := c.QueryParam("search")
+
+	// Parse pagination parameters
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	limit, err := strconv.Atoi(c.QueryParam("limit"))
+	if err != nil || limit < 1 {
+		limit = 5
+	}
+
+	// Optional: Set maximum limit to prevent abuse
+	if limit > 100 {
+		limit = 100
+	}
+
+	sessions, total, err := h.SessionRepository.GetSessionsByPatientID(page, limit, search, patientId)
+	if err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusInternalServerError, "Failed to get sessions")
+	}
+
+	// Calculate pagination metadata
+	var totalPages int
+	var hasNext, hasPrev bool
+
+	if page > 0 && limit > 0 {
+		totalPages = int(math.Ceil(float64(total) / float64(limit)))
+		hasNext = page < totalPages
+		hasPrev = page > 1
+	}
+
+	response := response.PaginatedResponse{
+		Data:       sessions,
+		Page:       page,
+		Limit:      limit,
+		Total:      total,
+		TotalPages: int(total / (int64(limit))),
 		HasNext:    hasNext,
 		HasPrev:    hasPrev,
 	}
@@ -89,14 +154,14 @@ func (h *SessionHandler) GetSessions(c echo.Context) error {
 func (h *SessionHandler) GetSession(c echo.Context) error {
 	id, err := helpers.GetParam(c)
 	if err != nil {
-		log.Error("Invalid Offer Id", err.Error())
-		return c.JSON(http.StatusBadRequest, "Invalid Offer Id")
+		log.Error("Invalid Session Id", err.Error())
+		return c.JSON(http.StatusBadRequest, "Invalid Session Id")
 	}
 
 	session, err := h.SessionRepository.GetSessionByID(id)
 	if err != nil {
-		log.Error("Offer Not Found", err.Error())
-		return c.JSON(http.StatusNotFound, "Offer Not Found")
+		log.Error("Session Not Found", err.Error())
+		return c.JSON(http.StatusNotFound, "Session Not Found")
 	}
 	return c.JSON(http.StatusOK, session)
 }
@@ -105,8 +170,8 @@ func (h *SessionHandler) GetSession(c echo.Context) error {
 func (h *SessionHandler) UpdateSession(c echo.Context) error {
 	id, err := helpers.GetParam(c)
 	if err != nil {
-		log.Error("Invalid Offer Id", err.Error())
-		return c.JSON(http.StatusBadRequest, "Invalid Offer Id")
+		log.Error("Invalid Session Id", err.Error())
+		return c.JSON(http.StatusBadRequest, "Invalid Session Id")
 	}
 
 	var sessionDto dto.Session

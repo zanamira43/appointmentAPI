@@ -20,24 +20,69 @@ func (r *GormSessionRepository) CreateSession(session *dto.Session) error {
 }
 
 // get all sessions data from sql database
-func (r *GormSessionRepository) GetAllSessions(page, limit int) ([]models.Session, int64, error) {
+func (r *GormSessionRepository) GetAllSessions(page, limit int, search string) ([]models.Session, int64, error) {
 	var sessions []models.Session
-
 	var total int64
 
+	// create blank query to build upon
+	query := r.DB.Model(&models.Session{})
+
+	// search by session subject
+	if search != "" {
+		searchPattern := "%" + search + "%"
+		query = query.Where("subtject LIKE ? ", searchPattern)
+	}
+
 	// get total number of sessions
-	err := r.DB.Model(&sessions).Count(&total).Error
+	err := query.Count(&total).Error
 	if err != nil {
 		return nil, 0, err
 	}
 
-	offset := (page - 1) * limit
+	if page > 0 && limit > 0 {
+		offset := (page - 1) * limit
+		query = query.Offset(offset).Limit(limit)
+	}
 
-	err = r.DB.Offset(offset).Limit(limit).Find(&sessions).Error
+	err = query.Order("id desc").Find(&sessions).Error
 	if err != nil {
 		return nil, 0, err
 	}
 	return sessions, total, nil
+}
+
+// get all sessions data from sql database by patient id
+func (r *GormSessionRepository) GetSessionsByPatientID(page, limit int, search string, patientId uint) ([]models.Session, int64, error) {
+
+	var sessions []models.Session
+	var total int64
+
+	// create blank query to build upon
+	query := r.DB.Where("patient_id = ?", patientId).Model(&models.Session{})
+
+	// search by session subject
+	if search != "" {
+		searchPattern := "%" + search + "%"
+		query = query.Where("subject LIKE ? ", searchPattern)
+	}
+
+	// get total number of sessions
+	err := query.Count(&total).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if page > 0 && limit > 0 {
+		offset := (page - 1) * limit
+		query = query.Offset(offset).Limit(limit)
+	}
+
+	err = query.Order("session_date desc").Find(&sessions).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	return sessions, total, nil
+
 }
 
 // get offer data by id from sql database
@@ -61,17 +106,23 @@ func (r *GormSessionRepository) UpdateSession(id uint, sessionDto *dto.Session) 
 	if sessionDto.PatientID != 0 {
 		session.PatientID = sessionDto.PatientID
 	}
+	if sessionDto.Subject != "" {
+		session.Subject = sessionDto.Subject
+	}
+
+	if sessionDto.CommunicationTypes != "" {
+		session.CommunicationTypes = sessionDto.CommunicationTypes
+	}
+
+	if sessionDto.SessionDate != "" {
+		session.SessionDate = sessionDto.SessionDate
+	}
+
 	if session.Duration != 0 {
 		session.Duration = sessionDto.Duration
 	}
 	if sessionDto.Status != "" {
 		session.Status = sessionDto.Status
-	}
-	if sessionDto.Notes != "" {
-		session.Notes = sessionDto.Notes
-	}
-	if sessionDto.SessionDate != "" {
-		session.SessionDate = sessionDto.SessionDate
 	}
 
 	err = r.DB.Save(&session).Error

@@ -26,23 +26,6 @@ type PatientRepository interface {
 	DeletePatient(id uint) error
 }
 
-type SessionRepository interface {
-	CreateSession(session *dto.Session) error
-	GetAllSessions() ([]models.Session, error)
-	GetSessionByID(id uint) (*models.Session, error)
-	UpdateSession(id uint, session *dto.Session) (*models.Session, error)
-	DeleteSession(id uint) error
-}
-
-// payment repository interface
-type PyamentRepository interface {
-	CreatePayments(payment *dto.Payment) error
-	GetAllPayments() ([]models.Payment, error)
-	GetPaymentsByID(id uint) (*models.Payment, error)
-	UpdatePaymentsByID(id uint, payment *dto.Payment) (*models.Payment, error)
-	DeletePaymentsByID(id uint) error
-}
-
 type TimeTableRepository interface {
 	CreateTimeTables(dtt *dto.TimeTable) error
 	GetAllTimeTables() ([]models.TimeTable, error)
@@ -57,4 +40,22 @@ type ProblemRepository interface {
 	GetProblemByPatientId(patientId uint) (*models.Problem, error)
 	UpdateProblemByID(id uint, problem *dto.Problem) (*models.Problem, error)
 	DeleteProblemByID(id uint) error
+}
+
+type SessionRepository interface {
+	CreateSession(session *dto.Session) error
+	GetAllSessions() ([]models.Session, error)
+	GetSessionsByPatientID(patientId uint) ([]models.Session, error)
+	GetSessionByID(id uint) (*models.Session, error)
+	UpdateSession(id uint, session *dto.Session) (*models.Session, error)
+	DeleteSession(id uint) error
+}
+
+// payment repository interface
+type PyamentRepository interface {
+	CreatePayments(payment *dto.Payment) error
+	GetAllPayments() ([]models.Payment, error)
+	GetPaymentsByID(id uint) (*models.Payment, error)
+	UpdatePaymentsByID(id uint, payment *dto.Payment) (*models.Payment, error)
+	DeletePaymentsByID(id uint) error
 }

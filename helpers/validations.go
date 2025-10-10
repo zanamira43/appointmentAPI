@@ -94,6 +94,14 @@ func ValidateSession(dto *dto.Session) error {
 		return errors.New("patient is required")
 	}
 
+	if dto.Subject == "" {
+		return errors.New("subject is required")
+	}
+
+	if dto.CommunicationTypes == "" {
+		return errors.New("communication types is required")
+	}
+
 	if dto.SessionDate == "" {
 		return errors.New("session date is required")
 	}

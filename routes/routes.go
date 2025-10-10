@@ -40,24 +40,6 @@ func SetupRoutes(app *echo.Echo) {
 	api.DELETE("/patients/:id", patientHandler.DeletePatient)
 	api.GET("/patients/search", patientHandler.GetPatientbySlug)
 
-	// session routes end points
-	sessionRepo := repository.NewGormSessionRepository(database.DB)
-	sessionHandler := handlers.NewSessionHandler(sessionRepo)
-	api.POST("/sessions", sessionHandler.CreateSessions)
-	api.GET("/sessions", sessionHandler.GetSessions)
-	api.GET("/sessions/:id", sessionHandler.GetSession)
-	api.PUT("/sessions/:id", sessionHandler.UpdateSession)
-	api.DELETE("/sessions/:id", sessionHandler.DeleteSession)
-
-	// payment routes end points
-	PaymentRepo := repository.NewGormPaymentRepository(database.DB)
-	PaymentHandler := handlers.NewPaymentHandler(PaymentRepo)
-	api.POST("/payments", PaymentHandler.CreatePayments)
-	api.GET("/payments", PaymentHandler.GetPayments)
-	api.GET("/payments/:id", PaymentHandler.GetPayment)
-	api.PUT("/payments/:id", PaymentHandler.UpdatePayment)
-	api.DELETE("/payments/:id", PaymentHandler.DeletePayment)
-
 	// user routes end points
 	userRepo = repository.NewGormUserRepository(database.DB)
 	userHandler := handlers.NewUserHandler(userRepo)
@@ -94,4 +76,23 @@ func SetupRoutes(app *echo.Echo) {
 	api.POST("/image/upload", helpers.UploadImage, middleware.IsUserAdmin)
 	// remove patient image from storage
 	api.POST("/image/delete", problemHandler.DeletePatientImageUrl, middleware.IsUserAdmin)
+
+	// session routes end points
+	sessionRepo := repository.NewGormSessionRepository(database.DB)
+	sessionHandler := handlers.NewSessionHandler(sessionRepo)
+	api.POST("/sessions", sessionHandler.CreateSessions)
+	api.GET("/sessions", sessionHandler.GetSessions)
+	api.GET("/sessions/patient/:id", sessionHandler.GetSessionsByPatientId)
+	api.GET("/sessions/:id", sessionHandler.GetSession)
+	api.PUT("/sessions/:id", sessionHandler.UpdateSession)
+	api.DELETE("/sessions/:id", sessionHandler.DeleteSession)
+
+	// payment routes end points
+	PaymentRepo := repository.NewGormPaymentRepository(database.DB)
+	PaymentHandler := handlers.NewPaymentHandler(PaymentRepo)
+	api.POST("/payments", PaymentHandler.CreatePayments)
+	api.GET("/payments", PaymentHandler.GetPayments)
+	api.GET("/payments/:id", PaymentHandler.GetPayment)
+	api.PUT("/payments/:id", PaymentHandler.UpdatePayment)
+	api.DELETE("/payments/:id", PaymentHandler.DeletePayment)
 }

@@ -42,10 +42,10 @@ func Connect() error {
 	db.AutoMigrate(
 		&models.User{},
 		&models.Patient{},
-		&models.Payment{},
-		&models.Session{},
 		&models.TimeTable{},
 		&models.Problem{},
+		&models.Session{},
+		&models.Payment{},
 	)
 
 	return nil
