@@ -46,6 +46,8 @@ func (h *PaymentHandler) CreatePayments(c echo.Context) error {
 
 // Get all service types
 func (h *PaymentHandler) GetPayments(c echo.Context) error {
+	search := c.QueryParam("search")
+
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil || page < 1 {
 		page = 1
@@ -61,14 +63,75 @@ func (h *PaymentHandler) GetPayments(c echo.Context) error {
 		limit = 100
 	}
 
-	payments, total, err := h.PaymentRepository.GetPayments(page, limit)
+	payments, total, err := h.PaymentRepository.GetPayments(page, limit, search)
 	if err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "Failed to get payments")
 	}
-	totalPages := int(math.Ceil(float64(total) / float64(limit)))
-	hasNext := page < totalPages
-	hasPrev := page > 1
+
+	// Calculate pagination metadata (only if paginated)
+	var totalPages int
+	var hasNext, hasPrev bool
+
+	if page > 0 && limit > 0 {
+		totalPages = int(math.Ceil(float64(total) / float64(limit)))
+		hasNext = page < totalPages
+		hasPrev = page > 1
+	}
+	response := response.PaginatedResponse{
+		Data:       payments,
+		Page:       page,
+		Limit:      limit,
+		Total:      total,
+		TotalPages: int(total / int64(limit)),
+		HasNext:    hasNext,
+		HasPrev:    hasPrev,
+	}
+	return c.JSON(http.StatusOK, response)
+}
+
+// Get all payments by patient id
+func (h *PaymentHandler) GetPaymentsByPatientId(c echo.Context) error {
+	patientId, err := helpers.GetParam(c)
+	if err != nil {
+		log.Error("Invalid patient Id", err.Error())
+		return c.JSON(http.StatusBadRequest, "Invalid patient Id")
+	}
+
+	// parse Search parameters
+	search := c.QueryParam("search")
+
+	// Parse pagination parameters
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	limit, err := strconv.Atoi(c.QueryParam("limit"))
+	if err != nil || limit < 1 {
+		limit = 10
+	}
+
+	// Optional: Set maximum limit to prevent abuse
+	if limit > 100 {
+		limit = 100
+	}
+
+	payments, total, err := h.PaymentRepository.GetPaymentsByPatientID(page, limit, search, patientId)
+	if err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusInternalServerError, "Failed to get payments")
+	}
+
+	// Calculate pagination metadata
+	var totalPages int
+	var hasNext, hasPrev bool
+
+	if page > 0 && limit > 0 {
+		totalPages = int(math.Ceil(float64(total) / float64(limit)))
+		hasNext = page < totalPages
+		hasPrev = page > 1
+	}
 
 	response := response.PaginatedResponse{
 		Data:       payments,
@@ -79,6 +142,7 @@ func (h *PaymentHandler) GetPayments(c echo.Context) error {
 		HasNext:    hasNext,
 		HasPrev:    hasPrev,
 	}
+
 	return c.JSON(http.StatusOK, response)
 }
 

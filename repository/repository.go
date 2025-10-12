@@ -19,7 +19,7 @@ type UserRepository interface {
 // project repository interface
 type PatientRepository interface {
 	CreatePatient(patient *dto.Patient) error
-	GetAllPatients() ([]models.Patient, error)
+	GetAllPatients(page, limit int, search string) ([]models.Patient, error)
 	GetPatientByID(id uint) (*models.Patient, error)
 	GetPatientBySlug(slug string) (*models.Patient, error)
 	UpdatePatient(id uint, patient *dto.Patient) (*models.Patient, error)
@@ -28,7 +28,7 @@ type PatientRepository interface {
 
 type TimeTableRepository interface {
 	CreateTimeTables(dtt *dto.TimeTable) error
-	GetAllTimeTables() ([]models.TimeTable, error)
+	GetAllTimeTables(page, limit int, search string) ([]models.TimeTable, error)
 	GetTimeTableByID(id uint) (*models.TimeTable, error)
 	UpdateTimeTableByID(id uint, dtt *dto.TimeTable) (*models.TimeTable, error)
 	DeleteTimeTableByID(id uint) error
@@ -44,17 +44,27 @@ type ProblemRepository interface {
 
 type SessionRepository interface {
 	CreateSession(session *dto.Session) error
-	GetAllSessions() ([]models.Session, error)
-	GetSessionsByPatientID(patientId uint) ([]models.Session, error)
+	GetAllSessions(page, limit int, search string) ([]models.Session, error)
+	GetSessionsByPatientID(patientId uint, page, limit int, search string) ([]models.Session, error)
 	GetSessionByID(id uint) (*models.Session, error)
 	UpdateSession(id uint, session *dto.Session) (*models.Session, error)
 	DeleteSession(id uint) error
 }
 
 // payment repository interface
+type PaymentTypeRepository interface {
+	CreatePaymentType(paymentType *dto.PaymentType) error
+	GetPaymentTypes(page, limit int, search string) ([]models.PaymentType, int64, error)
+	GetPaymentType(id uint) (*models.PaymentType, error)
+	UpdatePaymentType(id uint, dtoPaymentType *dto.PaymentType) (*models.PaymentType, error)
+	DeletePaymentType(id uint) error
+}
+
+// payment repository interface
 type PyamentRepository interface {
 	CreatePayments(payment *dto.Payment) error
-	GetAllPayments() ([]models.Payment, error)
+	GetPayments(page, limit int, search string) ([]models.Payment, int64, error)
+	GetPaymentsByPatientID(page, limit int, search string, patientId uint) ([]models.Payment, int64, error)
 	GetPaymentsByID(id uint) (*models.Payment, error)
 	UpdatePaymentsByID(id uint, payment *dto.Payment) (*models.Payment, error)
 	DeletePaymentsByID(id uint) error

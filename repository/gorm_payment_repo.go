@@ -20,17 +20,61 @@ func (r *GormPaymentRepository) CreatepPayments(payment *dto.Payment) error {
 }
 
 // get all payment data from sql database
-func (r *GormPaymentRepository) GetPayments(page, limit int) ([]models.Payment, int64, error) {
+func (r *GormPaymentRepository) GetPayments(page, limit int, search string) ([]models.Payment, int64, error) {
 	var payments []models.Payment
-
 	var total int64
-	err := r.DB.Model(&payments).Count(&total).Error
+
+	query := r.DB.Model(&models.Payment{})
+
+	if search != "" {
+		searchPattern := "%" + search + "%"
+		query.Where("payment_date LIKE ? ", searchPattern)
+	}
+
+	err := query.Count(&total).Error
 	if err != nil {
 		return nil, 0, err
 	}
 
-	offset := (page - 1) * limit
-	err = r.DB.Offset(offset).Limit(limit).Find(&payments).Error
+	if page > 0 && limit > 0 {
+		offset := (page - 1) * limit
+		query = query.Offset(offset).Limit(limit)
+
+	}
+	err = query.Find(&payments).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return payments, total, nil
+}
+
+// get all payments data from sql database by patient id
+func (r *GormPaymentRepository) GetPaymentsByPatientID(page, limit int, search string, patientId uint) ([]models.Payment, int64, error) {
+	var payments []models.Payment
+	var total int64
+
+	// create query with patient_id filter
+	query := r.DB.Where("patient_id = ?", patientId).Model(&models.Payment{})
+
+	// search by payment date
+	if search != "" {
+		searchPattern := "%" + search + "%"
+		query = query.Where("payment_date LIKE ? ", searchPattern)
+	}
+
+	// get total number of payments for this patient
+	err := query.Count(&total).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if page > 0 && limit > 0 {
+		offset := (page - 1) * limit
+		query = query.Offset(offset).Limit(limit)
+	}
+
+	err = query.Order("id desc").Find(&payments).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -58,21 +102,16 @@ func (r *GormPaymentRepository) UpdatePayment(id uint, dtopayment *dto.Payment) 
 	if dtopayment.PatientID != 0 {
 		payment.PatientID = dtopayment.PatientID
 	}
-	if dtopayment.SessionID != 0 {
-		payment.SessionID = dtopayment.SessionID
+
+	if dtopayment.PaymentTypeID != 0 {
+		payment.PaymentTypeID = dtopayment.PaymentTypeID
 	}
 
 	if dtopayment.Amount != 0 {
 		payment.Amount = dtopayment.Amount
 	}
-	if dtopayment.PaymentMethod != "" {
-		payment.PaymentMethod = dtopayment.PaymentMethod
-	}
 	if dtopayment.PaymentDate != "" {
 		payment.PaymentDate = dtopayment.PaymentDate
-	}
-	if dtopayment.Status != "" {
-		payment.Status = dtopayment.Status
 	}
 
 	err = r.DB.Save(&payment).Error

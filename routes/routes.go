@@ -92,7 +92,17 @@ func SetupRoutes(app *echo.Echo) {
 	PaymentHandler := handlers.NewPaymentHandler(PaymentRepo)
 	api.POST("/payments", PaymentHandler.CreatePayments)
 	api.GET("/payments", PaymentHandler.GetPayments)
+	api.GET("/payments/patient/:id", PaymentHandler.GetPaymentsByPatientId)
 	api.GET("/payments/:id", PaymentHandler.GetPayment)
 	api.PUT("/payments/:id", PaymentHandler.UpdatePayment)
 	api.DELETE("/payments/:id", PaymentHandler.DeletePayment)
+
+	// payment type routes end points
+	PaymentTypeRepo := repository.NewGormPaymentTypeRepository(database.DB)
+	PaymentTypeHandler := handlers.NewPaymentTypeHandler(PaymentTypeRepo)
+	api.POST("/payment-types", PaymentTypeHandler.CreatePaymentType)
+	api.GET("/payment-types", PaymentTypeHandler.GetPaymentTypes)
+	api.GET("/payment-types/:id", PaymentTypeHandler.GetPaymentType)
+	api.PUT("/payment-types/:id", PaymentTypeHandler.UpdatePaymentType)
+	api.DELETE("/payment-types/:id", PaymentTypeHandler.DeletePaymentType)
 }
