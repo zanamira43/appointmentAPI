@@ -38,7 +38,7 @@ func (r *GormPaymentRepository) GetPayments(page, limit int, search string) ([]m
 
 	if page > 0 && limit > 0 {
 		offset := (page - 1) * limit
-		query = query.Offset(offset).Limit(limit)
+		query = query.Preload("PaymentType").Offset(offset).Limit(limit)
 
 	}
 	err = query.Find(&payments).Error
@@ -74,7 +74,7 @@ func (r *GormPaymentRepository) GetPaymentsByPatientID(page, limit int, search s
 		query = query.Offset(offset).Limit(limit)
 	}
 
-	err = query.Order("id desc").Find(&payments).Error
+	err = query.Preload("PaymentType").Find(&payments).Error
 	if err != nil {
 		return nil, 0, err
 	}

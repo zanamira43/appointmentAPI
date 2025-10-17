@@ -113,25 +113,6 @@ func ValidateSession(dto *dto.Session) error {
 	return nil
 }
 
-// validate service type
-func ValidatePayment(dto *dto.Payment) error {
-
-	if dto.PatientID == 0 {
-		return errors.New("patient is required")
-	}
-	if dto.PaymentTypeID == 0 {
-		return errors.New("payment type is required")
-	}
-	if dto.Amount == 0 {
-		return errors.New("amount is required")
-	}
-	if dto.PaymentDate == "" {
-		return errors.New("payment date is required")
-	}
-
-	return nil
-}
-
 func ValidateTimeTables(dto *dto.TimeTable) error {
 
 	if dto.PatientName == "" {
@@ -179,5 +160,24 @@ func ValidatePaymentType(dto *dto.PaymentType) error {
 	if dto.Name == "" {
 		return errors.New("name is required")
 	}
+	return nil
+}
+
+// validate service type
+func ValidatePayment(dto *dto.Payment) error {
+
+	if dto.PatientID == 0 {
+		return errors.New("patient is required")
+	}
+	if dto.PaymentTypeID == 0 {
+		return errors.New("payment type is required")
+	}
+	if dto.Amount == 0 {
+		return errors.New("amount is required")
+	}
+	if dto.PaymentDate == "" {
+		return errors.New("payment date is required")
+	}
+
 	return nil
 }
