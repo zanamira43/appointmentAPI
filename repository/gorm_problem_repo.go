@@ -74,6 +74,10 @@ func (r *GormProblemRepository) UpdateProblemByID(id uint, problem *dto.Problem)
 		p.SecondaryProblems = problem.SecondaryProblems
 	}
 
+	if problem.IsDollarPayment != p.IsDollarPayment {
+		p.IsDollarPayment = problem.IsDollarPayment
+	}
+
 	if problem.NeedSessionsCount != 0 {
 		p.NeedSessionsCount = problem.NeedSessionsCount
 	}
