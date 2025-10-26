@@ -107,6 +107,10 @@ func (r *GormPaymentRepository) UpdatePayment(id uint, dtopayment *dto.Payment) 
 		payment.PaymentTypeID = dtopayment.PaymentTypeID
 	}
 
+	if dtopayment.IsDollarPayment != payment.IsDollarPayment {
+		payment.IsDollarPayment = dtopayment.IsDollarPayment
+	}
+
 	if dtopayment.Amount != 0 {
 		payment.Amount = dtopayment.Amount
 	}

@@ -8,11 +8,12 @@ type PaymentType struct {
 }
 
 type Payment struct {
-	ID            uint   `json:"id" gorm:"primaryKey"`
-	PatientID     uint   `json:"patient_id"`
-	PaymentTypeID uint   `json:"payment_type_id"`
-	Amount        int    `json:"amount"`
-	PaymentDate   string `json:"payment_date"`
+	ID              uint   `json:"id" gorm:"primaryKey"`
+	PatientID       uint   `json:"patient_id"`
+	PaymentTypeID   uint   `json:"payment_type_id"`
+	IsDollarPayment bool   `json:"is_dollar_payment"`
+	Amount          int    `json:"amount"`
+	PaymentDate     string `json:"payment_date"`
 
 	Patient     Patient     `json:"patient" gorm:"foreignKey:PatientID;constraint:OnDelete:SET NULL;"`
 	PaymentType PaymentType `json:"payment_type" gorm:"foreignKey:PaymentTypeID;constraint:OnDelete:SET NULL;"`
