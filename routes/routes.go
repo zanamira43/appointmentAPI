@@ -39,6 +39,7 @@ func SetupRoutes(app *echo.Echo) {
 	api.PUT("/patients/:id", patientHandler.UpdatePatient)
 	api.DELETE("/patients/:id", patientHandler.DeletePatient)
 	api.GET("/patients/search", patientHandler.GetPatientbySlug)
+	api.GET("/patients/:id/outcome", patientHandler.Outcome)
 
 	// user routes end points
 	userRepo = repository.NewGormUserRepository(database.DB)

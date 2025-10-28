@@ -176,3 +176,21 @@ func (h *PatientHandler) DeletePatient(c echo.Context) error {
 	}
 	return c.NoContent(http.StatusNoContent)
 }
+
+// patient outcome
+func (h *PatientHandler) Outcome(c echo.Context) error {
+	id, err := helpers.GetParam(c)
+	if err != nil {
+		log.Error("Invalid Patient Id", err.Error())
+		return c.JSON(http.StatusBadRequest, "Invalid Patient Id")
+	}
+
+	patientOutcomeResponse, err := h.PatientRepository.PatinetOutcome(id)
+
+	if err != nil {
+		log.Error("Patient Not Found", err.Error())
+		return c.JSON(http.StatusBadRequest, "Patient Not Found")
+	}
+
+	return c.JSON(http.StatusOK, patientOutcomeResponse)
+}

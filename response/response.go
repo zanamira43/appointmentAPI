@@ -53,3 +53,18 @@ type PaymentsResposes struct {
 	CreatedAt time.Time `json:"created_at" gorm:"type:timestamp;default:current_timestamp"`
 	UpdatedAt time.Time `json:"updated_at" gorm:"type:timestamp;default:current_timestamp"`
 }
+
+// patient outcome Response struct
+type PatientOutcomeResponse struct {
+	ID                uint    `json:"id"`
+	Name              string  `json:"name"`
+	NeedSessionsCount int     `json:"need_sessions_count"`
+	IsDollarPaymnet   bool    `json:"is_dollar_payment"`
+	SessionPrice      float32 `json:"session_price"`
+	SessionTotalPrice float32 `json:"session_total_price"`
+
+	SumReceivedSessionCount   int64   `json:"sum_received_session_count"`
+	SessionReceivedTotalPrice float32 `json:"session_received_total_price"`
+	TotalReceivedPayments     float32 `json:"total_received_payments"`
+	RemainingBalance          float32 `json:"remaining_balance"`
+}

@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/zanamira43/appointment-api/dto"
 	"github.com/zanamira43/appointment-api/models"
+	"github.com/zanamira43/appointment-api/response"
 	"gorm.io/gorm"
 )
 
@@ -113,4 +114,53 @@ func (r *GormPatientRepository) UpdatePatient(id uint, dtoPatient *dto.Patient) 
 // delete patient data by id from sql database
 func (r *GormPatientRepository) DeletePatient(id uint) error {
 	return r.DB.Where("id = ?", id).Delete(&dto.Patient{}).Error
+}
+
+// patinet outcome calculation
+func (r *GormPatientRepository) PatinetOutcome(id uint) (*response.PatientOutcomeResponse, error) {
+	var patient models.Patient
+
+	var SumReceivedSessionCount int64
+
+	err := r.DB.
+		Select("id", "name").
+		Preload("Problem", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "patient_id", "need_sessions_count", "is_dollar_payment", "session_price", "session_total_price")
+		}).
+		Preload("Sessions", func(db *gorm.DB) *gorm.DB {
+
+			return db.Select("id", "patient_id", "status").Where("status LIKE ?", "completed").
+				Count(&SumReceivedSessionCount)
+		}).
+		Preload("Payments", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "patient_id", "amount")
+		}).
+		First(&patient, id).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Calculate totals
+	var totalReceivedPayments float32
+	for _, payment := range patient.Payments {
+		totalReceivedPayments += float32(payment.Amount)
+	}
+
+	response := &response.PatientOutcomeResponse{
+		ID:   patient.ID,
+		Name: patient.Name,
+
+		NeedSessionsCount: patient.Problem.NeedSessionsCount,
+		IsDollarPaymnet:   patient.Problem.IsDollarPayment,
+		SessionPrice:      patient.Problem.SessionPrice,
+		SessionTotalPrice: patient.Problem.SessionTotalPrice,
+
+		SumReceivedSessionCount:   SumReceivedSessionCount,
+		SessionReceivedTotalPrice: float32(SumReceivedSessionCount) * patient.Problem.SessionPrice,
+		TotalReceivedPayments:     totalReceivedPayments,
+		RemainingBalance:          totalReceivedPayments - (float32(SumReceivedSessionCount) * patient.Problem.SessionPrice),
+	}
+
+	return response, nil
 }
