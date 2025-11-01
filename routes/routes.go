@@ -106,4 +106,10 @@ func SetupRoutes(app *echo.Echo) {
 	api.GET("/payment-types/:id", PaymentTypeHandler.GetPaymentType)
 	api.PUT("/payment-types/:id", PaymentTypeHandler.UpdatePaymentType)
 	api.DELETE("/payment-types/:id", PaymentTypeHandler.DeletePaymentType)
+
+	// setting routes end points
+	settingRepo := repository.NewGormSettingsRepository(database.DB)
+	settingHandler := handlers.NewSettingHandler(&settingRepo)
+	api.GET("/system/setting", settingHandler.GetSetting)
+	api.PUT("/system/setting", settingHandler.UpdateSetting)
 }

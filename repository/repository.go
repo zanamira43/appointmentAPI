@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/zanamira43/appointment-api/dto"
 	"github.com/zanamira43/appointment-api/models"
+	"github.com/zanamira43/appointment-api/response"
 )
 
 // user repository interface
@@ -24,6 +25,7 @@ type PatientRepository interface {
 	GetPatientBySlug(slug string) (*models.Patient, error)
 	UpdatePatient(id uint, patient *dto.Patient) (*models.Patient, error)
 	DeletePatient(id uint) error
+	PatinetOutcome(id uint) (*response.PatientOutcomeResponse, error)
 }
 
 type TimeTableRepository interface {
@@ -68,4 +70,10 @@ type PyamentRepository interface {
 	GetPaymentsByID(id uint) (*models.Payment, error)
 	UpdatePaymentsByID(id uint, payment *dto.Payment) (*models.Payment, error)
 	DeletePaymentsByID(id uint) error
+}
+
+// setting repository
+type SettingRepository interface {
+	GetSetting() (*models.Settings, error)
+	UpdateSetting(settings *dto.Settings) error
 }
