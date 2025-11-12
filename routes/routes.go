@@ -112,4 +112,13 @@ func SetupRoutes(app *echo.Echo) {
 	settingHandler := handlers.NewSettingHandler(&settingRepo)
 	api.GET("/system/setting", settingHandler.GetSetting)
 	api.PUT("/system/setting", settingHandler.UpdateSetting)
+
+	// notebook routes endPoint
+	notebookRepo := repository.NewGormNoteBookRepostiry(database.DB)
+	notebookHandler := handlers.NewNoteBookHandler(notebookRepo)
+	api.POST("/notebooks", notebookHandler.CreateNotebook, middleware.IsUserAdmin)
+	api.GET("/notebooks", notebookHandler.GetAllNotebooks, middleware.IsUserAdmin)
+	api.GET("/notebooks/:id", notebookHandler.GetNotebook, middleware.IsUserAdmin)
+	api.PUT("/notebooks/:id", notebookHandler.UpdateNotebook, middleware.IsUserAdmin)
+	api.DELETE("/notebooks/:id", notebookHandler.DeleteNotebook, middleware.IsUserAdmin)
 }

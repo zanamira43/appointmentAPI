@@ -181,3 +181,11 @@ func ValidatePayment(dto *dto.Payment) error {
 
 	return nil
 }
+
+func ValidateNotebook(dto *dto.NoteBook) error {
+	if dto.Content == "" {
+		return errors.New("content is required")
+	}
+
+	return nil
+}

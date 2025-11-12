@@ -77,3 +77,11 @@ type SettingRepository interface {
 	GetSetting() (*models.Settings, error)
 	UpdateSetting(settings *dto.Settings) error
 }
+
+type NoteBookRepository interface {
+	CreateNoteBook(noteBook *dto.NoteBook) error
+	GetAllNoteBooks(page, limit int, search string) ([]models.NoteBook, int64, error)
+	GetNoteBookByID(id uint) (*models.NoteBook, error)
+	UpdateNoteBookByID(id uint, noteBook *dto.NoteBook) (*models.NoteBook, error)
+	DeleteNoteBookByID(id uint) error
+}

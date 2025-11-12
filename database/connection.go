@@ -48,6 +48,7 @@ func Connect() error {
 		&models.PaymentType{},
 		&models.Payment{},
 		&models.Settings{},
+		&models.NoteBook{},
 	)
 
 	return nil
