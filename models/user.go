@@ -16,6 +16,8 @@ type User struct {
 	Role      string `json:"role"`
 	Active    bool   `json:"active"`
 
+	Patients []Patient `json:"patients"`
+
 	CreatedAt time.Time `json:"created_at" gorm:"type:timestamp;default:current_timestamp"`
 	UpdatedAt time.Time `json:"updated_at" gorm:"type:timestamp;default:current_timestamp"`
 }

@@ -38,7 +38,14 @@ func (h *PatientHandler) CreatePatient(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	err := h.PatientRepository.CreatePatient(patient)
+	auth := NewAuth((*repository.GormUserRepository)(h.PatientRepository))
+	user, err := auth.GetUserByCookie(c)
+	if err != nil {
+		log.Error("User Not Found", err.Error())
+		return c.JSON(http.StatusNotFound, "User not Found")
+	}
+
+	err = h.PatientRepository.CreatePatient(patient, user.ID)
 	if err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "Failed to create patient")
@@ -72,7 +79,14 @@ func (h *PatientHandler) GetAllPatients(c echo.Context) error {
 		limit = 100
 	}
 
-	patients, total, err := h.PatientRepository.GetAllPatients(page, limit, search)
+	auth := NewAuth((*repository.GormUserRepository)(h.PatientRepository))
+	user, err := auth.GetUserByCookie(c)
+	if err != nil {
+		log.Error("User Not Found", err.Error())
+		return c.JSON(http.StatusNotFound, "User not Found")
+	}
+
+	patients, total, err := h.PatientRepository.GetAllPatients(page, limit, search, user.ID, user.Role)
 	if err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusInternalServerError, "Failed to get patients")
@@ -153,8 +167,15 @@ func (h *PatientHandler) UpdatePatient(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
+	auth := NewAuth((*repository.GormUserRepository)(h.PatientRepository))
+	user, err := auth.GetUserByCookie(c)
+	if err != nil {
+		log.Error("User Not Found", err.Error())
+		return c.JSON(http.StatusNotFound, "User not Found")
+	}
+
 	patient := new(models.Patient)
-	patient, err = h.PatientRepository.UpdatePatient(id, &dtoPatient)
+	patient, err = h.PatientRepository.UpdatePatient(id, &dtoPatient, user.ID)
 	if err != nil {
 		log.Error("Failed to update patient", err.Error())
 		return c.JSON(http.StatusInternalServerError, "Failed to update patient")

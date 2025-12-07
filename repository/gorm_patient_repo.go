@@ -16,21 +16,39 @@ func NewGormPatientRepository(db *gorm.DB) *GormPatientRepository {
 }
 
 // insert new patient data into sql database
-func (r *GormPatientRepository) CreatePatient(patient *dto.Patient) error {
-	return r.DB.Create(&patient).Error
+func (r *GormPatientRepository) CreatePatient(patientDto *dto.Patient, UserID uint) error {
+
+	request := models.Patient{
+		Name:          patientDto.Name,
+		Gender:        patientDto.Gender,
+		Age:           patientDto.Age,
+		MarriedStatus: patientDto.MarriedStatus,
+		Profession:    patientDto.Profession,
+		Address:       patientDto.Address,
+		PhoneNumber:   patientDto.PhoneNumber,
+		UserID:        UserID,
+	}
+
+	return r.DB.Create(&request).Error
 }
 
 // get all patient data from sql database
-func (r *GormPatientRepository) GetAllPatients(page, limit int, search string) ([]models.Patient, int64, error) {
+func (r *GormPatientRepository) GetAllPatients(page, limit int, search string, userID uint, userRole string) ([]models.Patient, int64, error) {
 	var patients []models.Patient
 	var total int64
 
 	// create blank query to build upon
 	query := r.DB.Model(&models.Patient{})
 
+	// If the user is not an admin, they should see all patients created by non-admins.
+	// Admins can see all patients.
+	if userRole != "admin" {
+		query = query.Joins("JOIN users ON users.id = patients.user_id AND users.role != ?", "admin")
+	}
+
 	if search != "" {
 		searchPattern := "%" + search + "%"
-		query = query.Where("name LIKE ? OR slug LIKE ? OR phone_number LIKE ?", searchPattern, searchPattern, searchPattern)
+		query = query.Where("patients.name LIKE ? OR patients.slug LIKE ? OR patients.phone_number LIKE ?", searchPattern, searchPattern, searchPattern)
 	}
 
 	// get total number of patients
@@ -44,7 +62,9 @@ func (r *GormPatientRepository) GetAllPatients(page, limit int, search string) (
 		query = query.Offset(offset).Limit(limit)
 	}
 
-	err = query.Order("id desc").Find(&patients).Error
+	err = query.Preload("User", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, first_name")
+	}).Order("id desc").Find(&patients).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -74,7 +94,7 @@ func (r *GormPatientRepository) GetPatientBySlug(slug string) (*models.Patient, 
 }
 
 // update patient data by id from sql database
-func (r *GormPatientRepository) UpdatePatient(id uint, dtoPatient *dto.Patient) (*models.Patient, error) {
+func (r *GormPatientRepository) UpdatePatient(id uint, dtoPatient *dto.Patient, UserID uint) (*models.Patient, error) {
 	var patient models.Patient
 	err := r.DB.Where("id = ?", id).First(&patient).Error
 	if err != nil {
@@ -102,6 +122,10 @@ func (r *GormPatientRepository) UpdatePatient(id uint, dtoPatient *dto.Patient) 
 	}
 	if dtoPatient.PhoneNumber != "" {
 		patient.PhoneNumber = dtoPatient.PhoneNumber
+	}
+
+	if UserID != 0 {
+		patient.UserID = UserID
 	}
 
 	err = r.DB.Save(&patient).Error
