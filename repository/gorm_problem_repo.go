@@ -22,7 +22,6 @@ func (r *GormProblemRepository) CreateProblem(problem *dto.Problem) error {
 	p.SecondaryProblems = problem.SecondaryProblems
 	p.NeedSessionsCount = problem.NeedSessionsCount
 	p.SessionPrice = problem.SessionPrice
-	p.SessionTotalPrice = problem.SessionPrice * float32(problem.NeedSessionsCount)
 	p.PatientImage = problem.PatientImage
 	p.Details = problem.Details
 	return r.DB.Create(&p).Error
@@ -84,10 +83,6 @@ func (r *GormProblemRepository) UpdateProblemByID(id uint, problem *dto.Problem)
 
 	if problem.SessionPrice != 0 {
 		p.SessionPrice = problem.SessionPrice
-	}
-
-	if problem.SessionPrice != 0 && problem.NeedSessionsCount != 0 {
-		p.SessionTotalPrice = problem.SessionPrice * float32(problem.NeedSessionsCount)
 	}
 
 	p.PatientImage = problem.PatientImage

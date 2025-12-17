@@ -175,15 +175,11 @@ func (r *GormPatientRepository) PatinetOutcome(id uint) (*response.PatientOutcom
 		ID:   patient.ID,
 		Name: patient.Name,
 
-		NeedSessionsCount: patient.Problem.NeedSessionsCount,
-		IsDollarPaymnet:   patient.Problem.IsDollarPayment,
-		SessionPrice:      patient.Problem.SessionPrice,
-		SessionTotalPrice: patient.Problem.SessionTotalPrice,
-
-		SumReceivedSessionCount:   SumReceivedSessionCount,
-		SessionReceivedTotalPrice: float32(SumReceivedSessionCount) * patient.Problem.SessionPrice,
-		TotalReceivedPayments:     totalReceivedPayments,
-		RemainingBalance:          totalReceivedPayments - (float32(SumReceivedSessionCount) * patient.Problem.SessionPrice),
+		NeedSessionsCount:       patient.Problem.NeedSessionsCount,
+		IsDollarPaymnet:         patient.Problem.IsDollarPayment,
+		SessionPrice:            patient.Problem.SessionPrice,
+		SumReceivedSessionCount: SumReceivedSessionCount,
+		TotalReceivedPayments:   totalReceivedPayments,
 	}
 
 	return response, nil
