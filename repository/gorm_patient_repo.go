@@ -149,7 +149,7 @@ func (r *GormPatientRepository) PatinetOutcome(id uint) (*response.PatientOutcom
 	err := r.DB.
 		Select("id", "name").
 		Preload("Problem", func(db *gorm.DB) *gorm.DB {
-			return db.Select("id", "patient_id", "need_sessions_count", "is_dollar_payment", "session_price", "session_total_price")
+			return db.Select("id", "patient_id", "need_sessions_count", "is_dollar_payment", "session_price")
 		}).
 		Preload("Sessions", func(db *gorm.DB) *gorm.DB {
 
