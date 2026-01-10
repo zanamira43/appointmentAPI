@@ -189,3 +189,14 @@ func ValidateNotebook(dto *dto.NoteBook) error {
 
 	return nil
 }
+
+// person info validation
+func ValidatePersonInfo(dto *dto.PersonInfo) error {
+	if dto.FullName == "" {
+		return errors.New("Full Name is required")
+	}
+	if dto.PhoneNumber == "" {
+		return errors.New("Phone Number  is required")
+	}
+	return nil
+}

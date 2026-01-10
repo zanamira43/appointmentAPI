@@ -85,3 +85,12 @@ type NoteBookRepository interface {
 	UpdateNoteBookByID(id uint, noteBook *dto.NoteBook) (*models.NoteBook, error)
 	DeleteNoteBookByID(id uint) error
 }
+
+type PersonInfoRepository interface {
+	CreatePersonInfo(person *dto.PersonInfo) error
+	GetAllPersonInfo() ([]models.PersonInfo, error)
+	GetPersonInfoByID(id string) (*models.PersonInfo, error)
+	GetPersonInforByPhone(phone_number string) (*models.PersonInfo, error)
+	UpdatePersonInfo(id string, person *dto.PersonInfo) (*models.PersonInfo, error)
+	DeletePersonInfo(id string) error
+}

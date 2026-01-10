@@ -121,4 +121,14 @@ func SetupRoutes(app *echo.Echo) {
 	api.GET("/notebooks/:id", notebookHandler.GetNotebook, middleware.IsUserAdmin)
 	api.PUT("/notebooks/:id", notebookHandler.UpdateNotebook, middleware.IsUserAdmin)
 	api.DELETE("/notebooks/:id", notebookHandler.DeleteNotebook, middleware.IsUserAdmin)
+
+	// person info for 2 month plan routes endPoint
+	personInfoRepo := repository.NewGormPersonInfoRepository(database.DB)
+	personInfoHandler := handlers.NewPersonInfoHandler(personInfoRepo)
+	api.POST("/persons", personInfoHandler.CreatePersonInfo)
+	api.GET("/persons", personInfoHandler.GetAllPersonInfo)
+	api.GET("/persons/:id", personInfoHandler.GetPersonInfo)
+	api.PUT("/persons/:id", personInfoHandler.UpdatePersonInfo)
+	api.DELETE("/persons/:id", personInfoHandler.DeletePersonInfo)
+
 }
