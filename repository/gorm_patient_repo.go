@@ -157,7 +157,7 @@ func (r *GormPatientRepository) PatinetOutcome(id uint) (*response.PatientOutcom
 				Count(&SumReceivedSessionCount)
 		}).
 		Preload("Payments", func(db *gorm.DB) *gorm.DB {
-			return db.Select("id", "patient_id", "amount")
+			return db.Select("id", "patient_id", "amount", "is_dollar_payment")
 		}).
 		First(&patient, id).Error
 
@@ -167,8 +167,10 @@ func (r *GormPatientRepository) PatinetOutcome(id uint) (*response.PatientOutcom
 
 	// Calculate totals
 	var totalReceivedPayments float32
+	var isDollarPayment bool
 	for _, payment := range patient.Payments {
 		totalReceivedPayments += float32(payment.Amount)
+		isDollarPayment = payment.IsDollarPayment
 	}
 
 	response := &response.PatientOutcomeResponse{
@@ -176,7 +178,7 @@ func (r *GormPatientRepository) PatinetOutcome(id uint) (*response.PatientOutcom
 		Name: patient.Name,
 
 		NeedSessionsCount:       patient.Problem.NeedSessionsCount,
-		IsDollarPaymnet:         patient.Problem.IsDollarPayment,
+		IsDollarPaymnet:         isDollarPayment,
 		SessionPrice:            patient.Problem.SessionPrice,
 		SumReceivedSessionCount: SumReceivedSessionCount,
 		TotalReceivedPayments:   totalReceivedPayments,
