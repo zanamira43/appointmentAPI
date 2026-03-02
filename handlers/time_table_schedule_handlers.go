@@ -35,7 +35,7 @@ func (h *TimeTableHandler) GetTimeTables(c echo.Context) error {
 
 	limit, err := strconv.Atoi(c.QueryParam("limit"))
 	if err != nil || limit < 1 {
-		limit = 5 // default limit
+		limit = 10 // default limit
 	}
 
 	// Optional: Set maximum limit to prevent abuse
