@@ -58,6 +58,9 @@ type PaymentsResposes struct {
 type PatientOutcomeResponse struct {
 	ID                      uint    `json:"id"`
 	Name                    string  `json:"name"`
+	PatientCode             string  `json:"patient_code"`
+	Address                 string  `json:"patient_address"`
+	CommunicationTypes      string  `json:"communication_types"`
 	NeedSessionsCount       int     `json:"need_sessions_count"`
 	IsDollarPaymnet         bool    `json:"is_dollar_payment"`
 	SessionPrice            float32 `json:"session_price_one_month"`

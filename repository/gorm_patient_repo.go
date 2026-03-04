@@ -147,13 +147,13 @@ func (r *GormPatientRepository) PatinetOutcome(id uint) (*response.PatientOutcom
 	var SumReceivedSessionCount int64
 
 	err := r.DB.
-		Select("id", "name").
+		Select("id", "name", "slug", "address").
 		Preload("Problem", func(db *gorm.DB) *gorm.DB {
 			return db.Select("id", "patient_id", "need_sessions_count", "is_dollar_payment", "session_price")
 		}).
 		Preload("Sessions", func(db *gorm.DB) *gorm.DB {
 
-			return db.Select("id", "patient_id", "status").Where("status LIKE ?", "completed").
+			return db.Select("id", "patient_id", "status", "communication_types").Where("status LIKE ?", "completed").
 				Count(&SumReceivedSessionCount)
 		}).
 		Preload("Payments", func(db *gorm.DB) *gorm.DB {
@@ -173,9 +173,17 @@ func (r *GormPatientRepository) PatinetOutcome(id uint) (*response.PatientOutcom
 		isDollarPayment = payment.IsDollarPayment
 	}
 
+	var CommunicationType string
+	for _, session := range patient.Sessions {
+		CommunicationType = session.CommunicationTypes
+	}
+
 	response := &response.PatientOutcomeResponse{
-		ID:   patient.ID,
-		Name: patient.Name,
+		ID:                 patient.ID,
+		Name:               patient.Name,
+		PatientCode:        patient.Slug,
+		Address:            patient.Address,
+		CommunicationTypes: CommunicationType,
 
 		NeedSessionsCount:       patient.Problem.NeedSessionsCount,
 		IsDollarPaymnet:         isDollarPayment,
