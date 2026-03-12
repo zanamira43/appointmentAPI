@@ -198,6 +198,27 @@ func (h *PatientHandler) DeletePatient(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
+// delete patient signature image
+// delete signature image url & rempove it in ropo
+func (h *PatientHandler) DeletePatientSignatureImageUrl(c echo.Context) error {
+	var singatureFile dto.SignatureFileImage
+
+	if err := c.Bind(&singatureFile); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+	}
+
+	if singatureFile.SignatureFileUrl == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "SignatureImageUrl is required"})
+	}
+
+	if err := helpers.DeleteSignatureImageFromStorage(singatureFile.SignatureFileUrl); err != nil {
+		// Map specific errors to status codes if needed
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	return c.NoContent(http.StatusOK)
+}
+
 // patient outcome
 func (h *PatientHandler) Outcome(c echo.Context) error {
 	id, err := helpers.GetParam(c)

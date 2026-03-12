@@ -73,10 +73,18 @@ func SetupRoutes(app *echo.Echo) {
 	// patient images end points
 	// get image
 	api.Static("/image", "./uploads")
-	// upload image route endpoints for categories
+	// upload image route endpoints for patient
 	api.POST("/image/upload", helpers.UploadImage, middleware.IsUserAdmin)
 	// remove patient image from storage
 	api.POST("/image/delete", problemHandler.DeletePatientImageUrl, middleware.IsUserAdmin)
+
+	// patient signature image file end points
+	// get signature image
+	api.Static("/signature/image", "./uploads/signature")
+	// upload signature image route endpoints for categories
+	api.POST("/signature/image/upload", helpers.UploadSignatureFileImage)
+	// remove signature image from storage
+	api.POST("/signature/image/delete", patientHandler.DeletePatientSignatureImageUrl)
 
 	// session routes end points
 	sessionRepo := repository.NewGormSessionRepository(database.DB)

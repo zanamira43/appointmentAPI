@@ -21,6 +21,8 @@ type Patient struct {
 	Address       string `json:"address"`
 	PhoneNumber   string `json:"phone_number"`
 
+	SignatureFile string `json:"signature_file"`
+
 	Problem Problem `json:"problem"`
 
 	Payments []Payment `json:"payments"`

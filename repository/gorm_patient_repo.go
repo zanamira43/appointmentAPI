@@ -128,6 +128,8 @@ func (r *GormPatientRepository) UpdatePatient(id uint, dtoPatient *dto.Patient, 
 		patient.UserID = UserID
 	}
 
+	patient.SignatureFile = dtoPatient.SignatureFile
+
 	err = r.DB.Save(&patient).Error
 	if err != nil {
 		return nil, err
@@ -147,7 +149,7 @@ func (r *GormPatientRepository) PatinetOutcome(id uint) (*response.PatientOutcom
 	var SumReceivedSessionCount int64
 
 	err := r.DB.
-		Select("id", "name", "slug", "address").
+		Select("id", "name", "slug", "address", "signature_file").
 		Preload("Problem", func(db *gorm.DB) *gorm.DB {
 			return db.Select("id", "patient_id", "need_sessions_count", "is_dollar_payment", "session_price")
 		}).
@@ -183,6 +185,7 @@ func (r *GormPatientRepository) PatinetOutcome(id uint) (*response.PatientOutcom
 		Name:               patient.Name,
 		PatientCode:        patient.Slug,
 		Address:            patient.Address,
+		SignatureFile:      patient.SignatureFile,
 		CommunicationTypes: CommunicationType,
 
 		NeedSessionsCount:       patient.Problem.NeedSessionsCount,

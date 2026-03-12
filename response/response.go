@@ -60,6 +60,7 @@ type PatientOutcomeResponse struct {
 	Name                    string  `json:"name"`
 	PatientCode             string  `json:"patient_code"`
 	Address                 string  `json:"patient_address"`
+	SignatureFile           string  `json:"signature_file_url"`
 	CommunicationTypes      string  `json:"communication_types"`
 	NeedSessionsCount       int     `json:"need_sessions_count"`
 	IsDollarPaymnet         bool    `json:"is_dollar_payment"`

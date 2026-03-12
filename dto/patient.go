@@ -8,4 +8,5 @@ type Patient struct {
 	Profession    string `json:"profession"`
 	Address       string `json:"address"`
 	PhoneNumber   string `json:"phone_number"`
+	SignatureFile string `json:"signature_file"`
 }
