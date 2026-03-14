@@ -26,6 +26,7 @@ func (r *GormPatientRepository) CreatePatient(patientDto *dto.Patient, UserID ui
 		Profession:    patientDto.Profession,
 		Address:       patientDto.Address,
 		PhoneNumber:   patientDto.PhoneNumber,
+		IsPrivate:     patientDto.IsPrivate,
 		UserID:        UserID,
 	}
 
@@ -33,17 +34,16 @@ func (r *GormPatientRepository) CreatePatient(patientDto *dto.Patient, UserID ui
 }
 
 // get all patient data from sql database
-func (r *GormPatientRepository) GetAllPatients(page, limit int, search string, userID uint, userRole string) ([]models.Patient, int64, error) {
+func (r *GormPatientRepository) GetAllPatients(page, limit int, search string, userID uint, role string) ([]models.Patient, int64, error) {
 	var patients []models.Patient
 	var total int64
 
 	// create blank query to build upon
 	query := r.DB.Model(&models.Patient{})
 
-	// If the user is not an admin, they should see all patients created by non-admins.
-	// Admins can see all patients.
-	if userRole != "admin" {
-		query = query.Joins("JOIN users ON users.id = patients.user_id AND users.role != ?", "admin")
+	// Only admins can see private patients
+	if role != "admin" {
+		query = query.Where("is_private = false")
 	}
 
 	if search != "" {
@@ -129,6 +129,10 @@ func (r *GormPatientRepository) UpdatePatient(id uint, dtoPatient *dto.Patient, 
 	}
 
 	patient.SignatureFile = dtoPatient.SignatureFile
+
+	if dtoPatient.IsPrivate != patient.IsPrivate {
+		patient.IsPrivate = dtoPatient.IsPrivate
+	}
 
 	err = r.DB.Save(&patient).Error
 	if err != nil {

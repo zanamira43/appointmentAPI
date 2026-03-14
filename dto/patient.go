@@ -9,4 +9,5 @@ type Patient struct {
 	Address       string `json:"address"`
 	PhoneNumber   string `json:"phone_number"`
 	SignatureFile string `json:"signature_file"`
+	IsPrivate     bool   `json:"is_private"`
 }
