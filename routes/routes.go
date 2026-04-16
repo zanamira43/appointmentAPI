@@ -139,4 +139,6 @@ func SetupRoutes(app *echo.Echo) {
 	api.PUT("/persons/:id", personInfoHandler.UpdatePersonInfo)
 	api.DELETE("/persons/:id", personInfoHandler.DeletePersonInfo)
 
+	// license route endpoint
+	api.GET("/license", handlers.LicenseHandler)
 }
