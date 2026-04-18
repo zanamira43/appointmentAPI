@@ -58,7 +58,7 @@ func calculateDaysLeft(now, expiry time.Time) int {
 func LicenseHandler(c echo.Context) error {
 
 	start := time.Date(2025, 12, 1, 0, 0, 0, 0, time.UTC)
-	expiry := time.Date(2026, 12, 1, 0, 0, 0, 0, time.UTC)
+	expiry := time.Date(2027, 1, 1, 0, 0, 0, 0, time.UTC)
 	now := time.Now()
 
 	licens := License{
