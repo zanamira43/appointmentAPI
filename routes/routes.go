@@ -141,4 +141,9 @@ func SetupRoutes(app *echo.Echo) {
 
 	// license route endpoint
 	api.GET("/license", handlers.LicenseHandler)
+
+	// dashbaord routes
+	dashboardRepo := repository.NewGormDashboardRepository(database.DB)
+	dashboardHandler := handlers.NewDashboardHandler(dashboardRepo)
+	api.GET("/dashboard/outcome", dashboardHandler.Outcome)
 }

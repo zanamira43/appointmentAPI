@@ -68,3 +68,9 @@ type PatientOutcomeResponse struct {
 	SumReceivedSessionCount int64   `json:"sum_received_session_count"`
 	TotalReceivedPayments   float32 `json:"total_received_payments"`
 }
+
+type DashboardResponse struct {
+	TotalPatients int64 `json:"total_patients"`
+	TotalSessions int64 `json:"total_sessions"`
+	TotalUsers    int64 `json:"total_users"`
+}
